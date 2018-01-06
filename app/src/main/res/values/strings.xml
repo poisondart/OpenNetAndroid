@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">OpenNetClient</string>
+    <!-- NavigationView Menu Items-->
+    <string name="main_news">Главные новости</string>
+    <string name="forum">Форум</string>
+    <string name="topics">Тематика</string>
+    <string name="safety">Проблемы безопасности</string>
+    <string name="updates">Новые версии ПО</string>
+    <string name="linux">Linux</string>
+    <string name="BSD">BSD</string>
+    <string name="Ubuntu">Ubuntu</string>
+    <string name="Fedora">Fedora</string>
+    <string name="mozilla">Mozilla/Firefox</string>
+    <string name="preferences">Настройки</string>
+    <!-- -->
+    <string name="placeholder_testuser">TestUser</string>
+    <string name="placeholder_testemail">example@nmail.com</string>
+</resources>

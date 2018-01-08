@@ -22,9 +22,9 @@
         android:layout_below="@+id/date_view"
         tools:text="@string/titleview"
         android:layout_marginTop="3dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:textSize="15sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="20sp"
         android:textStyle="bold"/>
     <TextView
         android:layout_width="wrap_content"
@@ -33,8 +33,8 @@
         android:layout_below="@+id/title_view"
         tools:text="@string/newsview"
         android:layout_marginTop="3dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="6dp"
-        android:textSize="14sp"/>
+        android:textSize="16sp"/>
 </RelativeLayout>

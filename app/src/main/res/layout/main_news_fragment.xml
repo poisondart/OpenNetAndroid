@@ -19,12 +19,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
-
-        <android.support.v7.widget.RecyclerView
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/recyclerview"/>
-
+            android:id="@+id/swipetorefresh">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recyclerview"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

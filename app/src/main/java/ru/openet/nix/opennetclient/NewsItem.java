@@ -8,14 +8,16 @@ public class NewsItem {
     private String mDate;
     private String mTitle;
     private String mDescr;
+    private String mLink;
 
     public NewsItem() {
     }
 
-    public NewsItem(String date, String title, String descr) {
+    public NewsItem(String date, String title, String descr, String link) {
         mDate = date;
         mTitle = title;
         mDescr = descr;
+        mLink = link;
     }
 
     public String getDate() {
@@ -40,5 +42,13 @@ public class NewsItem {
 
     public void setDescr(String descr) {
         mDescr = descr;
+    }
+
+    public String getLink() {
+        return mLink;
+    }
+
+    public void setLink(String link) {
+        mLink = link;
     }
 }

@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.mozilla_item:
                                 updateFragment("Mozilla/Firefox", Links.MAIN_MOZILLA_FIREFOX_RSS_LINK);
                                 break;
+                            case R.id.favs_item:
+                                loadFavsFragment();
+                                break;
                         }
                     }
                 }, 250);
@@ -81,8 +84,11 @@ public class MainActivity extends AppCompatActivity {
         bundle.putString(TITLE_TAG, "Главные новости");
         bundle.putString(LINK_TAG, Links.MAIN_NEWS_RSS_LINK);
         mFragment.setArguments(bundle);
-        mFragmentManager.beginTransaction()
-                .add(R.id.main_view, mFragment)
-                .commit();
+        mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
+    }
+    private void loadFavsFragment(){
+        mFragmentManager.beginTransaction().remove(mFragment).commit();
+        mFragment = new FavsFragment();
+        mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
     }
 }

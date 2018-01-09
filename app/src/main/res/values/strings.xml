@@ -22,4 +22,8 @@
         будет поставляться под именем Code, по аналогии с другими приложениями Elementary
         (Files, Music, Videos, Calendar, Mail, Photos). Вне дистрибутива проект может упоминаться
         как "elementary Code".</string>
+    <string name="pl_favs">Здесь будут закладки</string>
+    <!-- -->
+    <string name="delete_all_hint">Удалить всё</string>
+    <string name="toast_all_deteted">Все закладки удалены</string>
 </resources>

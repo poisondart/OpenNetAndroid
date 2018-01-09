@@ -15,16 +15,17 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
 
+    public static final String TITLE_TAG = "title";
+    public static final String LINK_TAG = "link";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mDrawerLayout = findViewById(R.id.drawerlayout);
         mFragmentManager = getSupportFragmentManager();
-        mFragment = new MainNewsFragment();
-        mFragmentManager.beginTransaction()
-                .add(R.id.main_view, mFragment)
-                .commit();
+        mFragment = new BasicNewsFragment();
+        setupDefaultFragment();
         final NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -35,7 +36,28 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         switch (item.getItemId()){
                             case R.id.main_item:
-                                setFragment(new MainNewsFragment());
+                                updateFragment("Главные новости", Links.MAIN_NEWS_RSS_LINK);
+                                break;
+                            case R.id.security_item:
+                                updateFragment("Проблемы безопасности", Links.MAIN_SECURITY_PROB_RSS_LINK);
+                                break;
+                            case R.id.updates_item:
+                                updateFragment("Новые версии ПО", Links.MAIN_NEW_SOFT_PROB_RSS_LINK);
+                                break;
+                            case R.id.linux_item:
+                                updateFragment("Linux", Links.MAIN_LINUX_RSS_LINK);
+                                break;
+                            case R.id.bsd_item:
+                                updateFragment("BSD", Links.MAIN_BSD_RSS_LINK);
+                                break;
+                            case R.id.ubuntu_item:
+                                updateFragment("Ubuntu", Links.UBUNTU_NEWS_RSS_LINK);
+                                break;
+                            case R.id.fedora_item:
+                                updateFragment("Fedora", Links.MAIN_FEDORA_RSS_LINK);
+                                break;
+                            case R.id.mozilla_item:
+                                updateFragment("Mozilla/Firefox", Links.MAIN_MOZILLA_FIREFOX_RSS_LINK);
                                 break;
                         }
                     }
@@ -44,12 +66,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void setFragment(Fragment fragment){
-        mFragmentManager.beginTransaction()
-                .remove(mFragment)
-                .commit();
-        mFragment = fragment;
+    private void updateFragment(String title, String link){
+        mFragmentManager.beginTransaction().remove(mFragment).commit();
+        mFragment = new BasicNewsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(TITLE_TAG, title);
+        bundle.putString(LINK_TAG, link);
+        mFragment.setArguments(bundle);
+        mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
+    }
+    private void setupDefaultFragment(){
+        Bundle bundle = new Bundle();
+        bundle.putString(TITLE_TAG, "Главные новости");
+        bundle.putString(LINK_TAG, Links.MAIN_NEWS_RSS_LINK);
+        mFragment.setArguments(bundle);
         mFragmentManager.beginTransaction()
                 .add(R.id.main_view, mFragment)
                 .commit();

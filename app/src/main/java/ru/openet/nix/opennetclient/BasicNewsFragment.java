@@ -27,19 +27,15 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Created by Nix on 02.01.2018.
  */
 
-public class MainNewsFragment extends Fragment {
+public class BasicNewsFragment extends Fragment {
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -50,11 +46,21 @@ public class MainNewsFragment extends Fragment {
     private DividerItemDecoration mDividerItemDecoration;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private String mLink;
+    private String mTitle;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        mLink = bundle.getString(MainActivity.LINK_TAG);
+        mTitle = bundle.getString(MainActivity.TITLE_TAG);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.main_news_fragment, container, false);
-        //arrayListInit();
         mNewsItems = new ArrayList<>();
         mToolbar = v.findViewById(R.id.toolbar);
         mRecyclerView = v.findViewById(R.id.recyclerview);
@@ -65,8 +71,7 @@ public class MainNewsFragment extends Fragment {
         mAdapter = new NewsItemAdapter(mNewsItems);
         mRecyclerView.setAdapter(mAdapter);
         mSwipeRefreshLayout = v.findViewById(R.id.swipetorefresh);
-        mToolbar.setTitle("Главные новости");
-        /*способ взят по ссылке https://stackoverflow.com/q/35015182*/
+        mToolbar.setTitle(mTitle);
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         actionBar.setSupportActionBar(mToolbar);
         mDrawerLayout = actionBar.findViewById(R.id.drawerlayout);
@@ -74,11 +79,11 @@ public class MainNewsFragment extends Fragment {
                 R.string.app_name);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        new FetchFeedTask(this).execute();
+        new FetchFeedTask(this, mLink).execute();
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new FetchFeedTask(MainNewsFragment.this).execute();
+                new FetchFeedTask(BasicNewsFragment.this, mLink).execute();
             }
         });
         return v;
@@ -86,24 +91,26 @@ public class MainNewsFragment extends Fragment {
 
 
     private static class FetchFeedTask extends AsyncTask<Integer, Void, Integer>{
-        private WeakReference<MainNewsFragment> fragmentRef;
+        private WeakReference<BasicNewsFragment> fragmentRef;
+        private String linkRef;
 
-        private FetchFeedTask(MainNewsFragment context) {
+        private FetchFeedTask(BasicNewsFragment context, String link) {
             fragmentRef = new WeakReference<>(context);
+            linkRef = link;
         }
 
         @Override
         protected void onPreExecute() {
-            MainNewsFragment fragment = fragmentRef.get();
+            BasicNewsFragment fragment = fragmentRef.get();
             if (fragment == null) return;
             fragment.mSwipeRefreshLayout.setRefreshing(true);
         }
 
         @Override
         protected Integer doInBackground(Integer... integers) {
-            MainNewsFragment fragment = fragmentRef.get();
+            BasicNewsFragment fragment = fragmentRef.get();
             try{
-                URL url = new URL(Links.MAIN_NEWS_RSS_LINK);
+                URL url = new URL(linkRef);
                 InputStream inputStream = url.openConnection().getInputStream();
                 fragment.mNewsItems = parseFeed(inputStream);
 
@@ -119,7 +126,7 @@ public class MainNewsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Integer integer) {
-            MainNewsFragment fragment = fragmentRef.get();
+            BasicNewsFragment fragment = fragmentRef.get();
             if (fragment == null) return;
             fragment.mSwipeRefreshLayout.setRefreshing(false);
             fragment.mRecyclerView.setAdapter(new NewsItemAdapter(fragment.mNewsItems));

@@ -1,5 +1,6 @@
 package ru.openet.nix.opennetclient;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
@@ -19,7 +20,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
 
     private ArrayList<NewsItem> mNewsItems;
 
-    public NewsItemAdapter(ArrayList<NewsItem> items) {
+    NewsItemAdapter(ArrayList<NewsItem> items) {
         mNewsItems = items;
     }
 
@@ -30,11 +31,9 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
     }
 
     @Override
-    public void onBindViewHolder(NewsItemViewHolder holder, int position) {
-        Spanned spanned = Html.fromHtml(mNewsItems.get(position).getDescr());
-        holder.dateView.setText(mNewsItems.get(position).getDate());
-        holder.titleView.setText(mNewsItems.get(position).getTitle());
-        holder.descrView.setText(spanned);
+    public void onBindViewHolder(final NewsItemViewHolder holder, int position) {
+        NewsItem item = mNewsItems.get(position);
+        holder.bindItem(item);
     }
 
     @Override
@@ -42,14 +41,34 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
         return mNewsItems.size();
     }
 
-    static class NewsItemViewHolder extends RecyclerView.ViewHolder{
-        TextView dateView, titleView, descrView;
+    static class NewsItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView mDateView, mTitleView, mDescrView;
+        private NewsItem mItem;
         NewsItemViewHolder(View itemView) {
             super(itemView);
-            dateView = itemView.findViewById(R.id.date_view);
-            titleView = itemView.findViewById(R.id.title_view);
-            descrView = itemView.findViewById(R.id.descr_view);
-            descrView.setMovementMethod(LinkMovementMethod.getInstance());
+            itemView.setOnClickListener(this);
+            mDateView = itemView.findViewById(R.id.date_view);
+            mTitleView = itemView.findViewById(R.id.title_view);
+            mDescrView = itemView.findViewById(R.id.descr_view);
+            mDescrView.setMovementMethod(ClickableMovementMethod.getInstance());
+            mDescrView.setClickable(false);
+            mDescrView.setLongClickable(false);
+        }
+
+        private void bindItem(NewsItem item){
+            mItem = item;
+            Spanned spanned = Html.fromHtml(mItem.getDescr());
+            mTitleView.setText(mItem.getTitle());
+            mDescrView.setText(spanned);
+            mDateView.setText(mItem.getDate());
+        }
+        @Override
+        public void onClick(View view) {
+            Intent intent = ArticleActivity.newInstance(view.getContext(),
+                    mItem.getTitle(),
+                    mItem.getLink(),
+                    mItem.getDate());
+            view.getContext().startActivity(intent);
         }
     }
 }

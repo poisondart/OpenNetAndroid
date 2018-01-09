@@ -7,7 +7,7 @@
 <item android:title="@string/topics">
     <menu>
         <item
-            android:id="@+id/safety_item"
+            android:id="@+id/security_item"
             android:title="@string/safety"/>
         <item
             android:id="@+id/updates_item"

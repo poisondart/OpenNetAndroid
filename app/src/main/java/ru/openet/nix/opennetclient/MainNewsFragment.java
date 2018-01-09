@@ -24,7 +24,16 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by Nix on 02.01.2018.
@@ -172,7 +181,15 @@ public class MainNewsFragment extends Fragment {
                 if (name.equalsIgnoreCase("title")) {
                     title = result;
                 } else if (name.equalsIgnoreCase("pubDate")) {
-                    pubDate = result;
+                    DateFormat oldDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
+                    DateFormat newDateFormat = new SimpleDateFormat("d MMMM yyyy", new Locale("ru"));
+                    try{
+                        Date date = oldDateFormat.parse(result);
+                        pubDate = newDateFormat.format(date);
+                    }catch (ParseException p){
+                        p.printStackTrace();
+                    }
+
                 } else if (name.equalsIgnoreCase("description")) {
                     if(!hook){
                         descr = result;

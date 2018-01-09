@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         mFragment = new BasicNewsFragment();
         setupDefaultFragment();
         final NavigationView navigationView = findViewById(R.id.navigation);
+        navigationView.setCheckedItem(R.id.main_item);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull final MenuItem item) {

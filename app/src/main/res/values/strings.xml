@@ -11,6 +11,7 @@
     <string name="Ubuntu">Ubuntu</string>
     <string name="Fedora">Fedora</string>
     <string name="mozilla">Mozilla/Firefox</string>
+    <string name="favs">Закладки</string>
     <string name="preferences">Настройки</string>
     <!-- Placeholders-->
     <string name="dateview">7 января 2018 г., 6:41</string>

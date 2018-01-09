@@ -1,6 +1,9 @@
 package ru.openet.nix.opennetclient;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +31,10 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
 
     @Override
     public void onBindViewHolder(NewsItemViewHolder holder, int position) {
+        Spanned spanned = Html.fromHtml(mNewsItems.get(position).getDescr());
         holder.dateView.setText(mNewsItems.get(position).getDate());
         holder.titleView.setText(mNewsItems.get(position).getTitle());
-        holder.descrView.setText(mNewsItems.get(position).getDescr());
+        holder.descrView.setText(spanned);
     }
 
     @Override
@@ -45,6 +49,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
             dateView = itemView.findViewById(R.id.date_view);
             titleView = itemView.findViewById(R.id.title_view);
             descrView = itemView.findViewById(R.id.descr_view);
+            descrView.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 }

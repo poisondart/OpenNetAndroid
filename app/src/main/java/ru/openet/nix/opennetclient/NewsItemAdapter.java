@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +63,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
         }
         @Override
         public void onClick(View view) {
-            Intent intent = ArticleActivity.newInstance(view.getContext(),
+            Intent intent = ArticleHostActivity.newInstance(view.getContext(),
                     mItem.getTitle(),
                     mItem.getLink(),
                     mItem.getDate());

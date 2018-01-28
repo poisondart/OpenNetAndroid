@@ -56,7 +56,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
 
         private void bindItem(NewsItem item){
             mItem = item;
-            Spanned spanned = Html.fromHtml(mItem.getDescr());
+            Spanned spanned = Html.fromHtml(mItem.getDescr().replaceAll("<img.+?>", ""));
             mTitleView.setText(mItem.getTitle());
             mDescrView.setText(spanned);
             mDateView.setText(mItem.getDate());

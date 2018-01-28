@@ -25,6 +25,17 @@
     <string name="pl_favs">Здесь будут закладки</string>
     <string name="pl_date">9 января 2018</string>
     <string name="pl_title">Представлен новый дизайн SourceForge</string>
+    <string name="pl_text_part">Разработчики проекта Solus, развивающего одноимённый дистрибутив
+        GNU/Linux и окружение рабочего стола Budgie, представили первый выпуск пакета Linux Driver Management
+        (LDM), предоставляющего библиотеку функций и инструментарий для быстрого определения
+        состава аппаратного окружения текущей системы.
+        Библиотека позволяет получить список имеющихся устройств и сопоставить каждое
+        устройство с применяемыми для этого устройства драйверами или приложениями из
+        репозитория. Код библиотеки написан на языке Си и распространяется под лицензией LGPL2.1. </string>
+    <string name="pl_code_part">$ grep . /sys/devices/system/cpu/vulnerabilities/*
+   /sys/devices/system/cpu/vulnerabilities/meltdown:Mitigation: PTI
+   /sys/devices/system/cpu/vulnerabilities/spectre_v1:Vulnerable
+   /sys/devices/system/cpu/vulnerabilities/spectre_v2:Vulnerable: Minimal generic SM retpoline</string>
     <!-- -->
     <string name="delete_all_hint">Удалить всё</string>
     <string name="toast_all_deteted">Все закладки удалены</string>

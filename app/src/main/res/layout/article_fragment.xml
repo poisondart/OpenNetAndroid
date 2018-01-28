@@ -18,27 +18,25 @@
             app:layout_scrollFlags="scroll|enterAlways"
             android:id="@+id/toolbar_article"/>
     </android.support.design.widget.AppBarLayout>
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/swipetorefresh"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 <android.support.v4.widget.NestedScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
+        <ProgressBar
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/article_title"
-            tools:text="@string/pl_title"
-            android:layout_margin="12dp"
-            android:textSize="23sp"
-            android:textStyle="bold"
-            android:layout_alignParentBottom="true"/>
+            android:id="@+id/progressbar_article"
+            android:visibility="visible"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:indeterminate="true"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/article_recyclerview"
+            android:layout_below="@+id/progressbar_article"/>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>

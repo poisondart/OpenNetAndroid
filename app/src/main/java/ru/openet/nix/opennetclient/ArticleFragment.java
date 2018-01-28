@@ -1,14 +1,26 @@
 package ru.openet.nix.opennetclient;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 /**
  * Created by Nix on 28.01.2018.
@@ -16,8 +28,13 @@ import android.widget.TextView;
 
 public class ArticleFragment extends Fragment {
 
-    private TextView mArticleTitleView;
     private Toolbar mToolbar;
+    private ProgressBar mProgressBar;
+    private Article mArticle;
+    private ArrayList<ArticlePart> mArticleParts;
+    private ArticleRecyclerViewAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
 
     private String mArticleTitle, mArticleDate, mArticleLink;
 
@@ -48,16 +65,87 @@ public class ArticleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.article_fragment, container, false);
         mToolbar = v.findViewById(R.id.toolbar_article);
-        mArticleTitleView = v.findViewById(R.id.article_title);
+        mProgressBar = v.findViewById(R.id.progressbar_article);
+        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView = v.findViewById(R.id.article_recyclerview);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mArticleParts = new ArrayList<>();
+        mArticle = new Article(mArticleDate, mArticleTitle, mArticleLink);
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         actionBar.setSupportActionBar(mToolbar);
         if(actionBar.getSupportActionBar() != null){
             actionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         actionBar.getSupportActionBar().setDisplayShowHomeEnabled(true);
-        mToolbar.setTitle(mArticleDate);
-        mArticleTitleView = v.findViewById(R.id.article_title);
-        mArticleTitleView.setText(mArticleTitle);
+        actionBar.setTitle(mArticleDate);
+        mAdapter = new ArticleRecyclerViewAdapter(getContext(), mArticleTitle, mArticleDate, mArticleParts);
+        mRecyclerView.setAdapter(mAdapter);
+        new FetchPartsTask(mArticleLink, this).execute();
         return v;
+    }
+
+
+    private static class FetchPartsTask extends AsyncTask<Integer, Void, Integer>{
+        private Document mDocument;
+        private Element mElement;
+        private Elements mChilds;
+        private String mLink;
+        private WeakReference<ArticleFragment> mReference;
+
+        public FetchPartsTask(String link, ArticleFragment reference) {
+            mLink = link;
+            mReference = new WeakReference<>(reference);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ArticleFragment fragment = mReference.get();
+            if (fragment == null) return;
+            fragment.mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            ArticleFragment fragment = mReference.get();
+            if (fragment == null) return;
+            if (integer == 0){
+                Toast.makeText(fragment.getContext(), "Не удалось загрузить данные", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            fragment.mArticle.setArticleParts(fragment.mArticleParts);
+            fragment.mAdapter.setParts(fragment.mArticleParts);
+            fragment.mAdapter.notifyDataSetChanged();
+            fragment.mProgressBar.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            int size = 0;
+            ArticleFragment fragment = mReference.get();
+            try{
+                mDocument = Jsoup.connect(mLink).get();
+                mElement = mDocument.select("td[class = chtext]").first();
+                mChilds = mElement.getAllElements();
+                for(Element e : mChilds){
+                    if(e.tagName().equals("p") || e.tagName().equals("li")){
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.SIMPLE_TEXT, e.html());
+                        fragment.mArticleParts.add(articlePart);
+                    }else if(e.tagName().equals("pre")){
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.CODE, e.text());
+                        fragment.mArticleParts.add(articlePart);
+                    }else if(e.tagName().equals("img")){
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.IMAGE, e.attr("src"));
+                        fragment.mArticleParts.add(articlePart);
+                    }
+                }
+                size = mChilds.size();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            return size;
+        }
     }
 }

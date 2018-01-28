@@ -11,7 +11,7 @@
     <string name="Ubuntu">Ubuntu</string>
     <string name="Fedora">Fedora</string>
     <string name="mozilla">Mozilla/Firefox</string>
-    <string name="favs">Закладки</string>
+    <string name="favs">Избранное</string>
     <string name="preferences">Настройки</string>
     <!-- Placeholders-->
     <string name="dateview">7 января 2018 г., 6:41</string>
@@ -22,7 +22,7 @@
         будет поставляться под именем Code, по аналогии с другими приложениями Elementary
         (Files, Music, Videos, Calendar, Mail, Photos). Вне дистрибутива проект может упоминаться
         как "elementary Code".</string>
-    <string name="pl_favs">Здесь будут закладки</string>
+    <string name="pl_favs">Здесь будут сохранённые статьи</string>
     <string name="pl_date">9 января 2018</string>
     <string name="pl_title">Представлен новый дизайн SourceForge</string>
     <string name="pl_text_part">Разработчики проекта Solus, развивающего одноимённый дистрибутив
@@ -38,5 +38,5 @@
    /sys/devices/system/cpu/vulnerabilities/spectre_v2:Vulnerable: Minimal generic SM retpoline</string>
     <!-- -->
     <string name="delete_all_hint">Удалить всё</string>
-    <string name="toast_all_deteted">Все закладки удалены</string>
+    <string name="toast_all_deteted">Все статьи удалены</string>
 </resources>

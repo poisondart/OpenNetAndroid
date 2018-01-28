@@ -37,5 +37,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="8dp"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:maxLines="16"
+        android:ellipsize="marquee"
+        android:singleLine="false"/>
 </RelativeLayout>

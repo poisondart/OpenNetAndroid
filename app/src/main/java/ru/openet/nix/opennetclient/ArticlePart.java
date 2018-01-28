@@ -8,13 +8,13 @@ package ru.openet.nix.opennetclient;
 public class ArticlePart {
     private String mText;
     private String mCode;
-    //private Bitmap mBitmap;
     private String mImageLink;
     private int mType;
 
     public static final int SIMPLE_TEXT = 0;
     public static final int IMAGE = 1;
     public static final int CODE = 2;
+    public static final int LIST_ITEM = 3;
 
     public ArticlePart(int type, String text) {
         mType = type;
@@ -30,8 +30,11 @@ public class ArticlePart {
             mImageLink = text;
             mCode = null;
             mText = null;
+        }else if(type == LIST_ITEM){
+            mText = text;
+            mCode = null;
+            mImageLink = null;
         }
-        //mBitmap = null;
     }
 
     public String getText() {
@@ -49,14 +52,6 @@ public class ArticlePart {
     public void setCode(String code) {
         mCode = code;
     }
-
-    /*public Bitmap getBitmap() {
-        return mBitmap;
-    }*/
-
-    /*public void setBitmap(Bitmap bitmap) {
-        mBitmap = bitmap;
-    }*/
 
     public int getType() {
         return mType;

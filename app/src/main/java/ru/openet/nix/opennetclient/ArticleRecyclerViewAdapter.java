@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 
 /**
@@ -25,6 +23,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int TYPE_ITEM_TEXT = 2;
     private static final int TYPE_ITEM_CODE = 3;
     private static final int TYPE_ITEM_IMAGE = 4;
+    private static final int TYPE_ITEM_LIST = 5;
     private Context mContext;
     private ArrayList<ArticlePart> mArticleParts;
     private String mArticleTitle;
@@ -68,6 +67,11 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_part_image, parent,false);
             return new ImagePartViewHolder(itemView);
+        }else if(viewType == TYPE_ITEM_LIST){
+            //Inflating image view
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.article_part_list, parent,false);
+            return new ListPartViewHolder(itemView);
         }else return null;
     }
 
@@ -81,11 +85,15 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             footerHolder.footerTitle.setText(mArticleFooter);
         }else if (holder instanceof TextPartViewHolder) {
             final TextPartViewHolder textPartViewHolder = (TextPartViewHolder) holder;
-            Spanned spanned = Html.fromHtml(mArticleParts.get(position - 1).getText());
+            Spanned spanned = Html.fromHtml(mArticleParts.get(position - 1).getText().replaceAll("<img.+?>", ""));
             textPartViewHolder.textView.setText(spanned);
         }else if (holder instanceof CodePartViewHolder) {
             final CodePartViewHolder codePartViewHolder = (CodePartViewHolder) holder;
             codePartViewHolder.codeView.setText(mArticleParts.get(position - 1).getCode());
+        }else if (holder instanceof ListPartViewHolder) {
+            final ListPartViewHolder listPartViewHolder = (ListPartViewHolder) holder;
+            Spanned spanned = Html.fromHtml(mArticleParts.get(position - 1).getText().replaceAll("<img.+?>", ""));
+            listPartViewHolder.textView.setText(spanned);
         }else if (holder instanceof ImagePartViewHolder) {
             final ImagePartViewHolder imagePartViewHolder = (ImagePartViewHolder) holder;
             Glide.with(mContext)
@@ -108,6 +116,8 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 return TYPE_ITEM_CODE;
             }else if(mArticleParts.get(position - 1).getType() == ArticlePart.IMAGE){
                 return TYPE_ITEM_IMAGE;
+            }else if(mArticleParts.get(position - 1).getType() == ArticlePart.LIST_ITEM){
+                return TYPE_ITEM_LIST;
             }else{
                 return 0;
             }
@@ -157,6 +167,16 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         private ImagePartViewHolder(View view){
             super(view);
             imageView = view.findViewById(R.id.image_part);
+        }
+    }
+    private class ListPartViewHolder extends RecyclerView.ViewHolder{
+        TextView textView;
+        private ListPartViewHolder(View view){
+            super(view);
+            textView = view.findViewById(R.id.article_list_item);
+            textView.setMovementMethod(ClickableMovementMethod.getInstance());
+            textView.setClickable(false);
+            textView.setLongClickable(false);
         }
     }
 }

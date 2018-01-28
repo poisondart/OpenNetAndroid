@@ -160,8 +160,11 @@ public class ArticleFragment extends Fragment {
                 mElement = mDocument.select("td[class = chtext]").first();
                 mChilds = mElement.getAllElements();
                 for(Element e : mChilds){
-                    if(e.tagName().equals("p") || e.tagName().equals("li")){
+                    if(e.tagName().equals("p")){
                         ArticlePart articlePart = new ArticlePart(ArticlePart.SIMPLE_TEXT, e.html());
+                        fragment.mArticleParts.add(articlePart);
+                    }else if(e.tagName().equals("li")){
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.LIST_ITEM, e.html());
                         fragment.mArticleParts.add(articlePart);
                     }else if(e.tagName().equals("pre")){
                         ArticlePart articlePart = new ArticlePart(ArticlePart.CODE, e.text());

@@ -2,11 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:background="@color/colorWhite"
+              android:elevation="6dp">
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
+    android:layout_margin="6dp"
     android:id="@+id/topic_links"
-    android:text="@string/pl_date"/>
+    android:text="Ссылки по теме:"/>
 </LinearLayout>

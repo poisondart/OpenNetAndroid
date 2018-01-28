@@ -36,7 +36,11 @@
    /sys/devices/system/cpu/vulnerabilities/meltdown:Mitigation: PTI
    /sys/devices/system/cpu/vulnerabilities/spectre_v1:Vulnerable
    /sys/devices/system/cpu/vulnerabilities/spectre_v2:Vulnerable: Minimal generic SM retpoline</string>
-    <!-- -->
+    <!-- Hints-->
     <string name="delete_all_hint">Удалить всё</string>
     <string name="toast_all_deteted">Все статьи удалены</string>
+    <string name="share_button_hint">Поделиться</string>
+    <string name="to_favs_button_hint">Сохранить</string>
+    <string name="added_to_favs">Добавлено в избранные статьи</string>
+    <string name="deleted_from_favs">Удалено из избранных статей</string>
 </resources>

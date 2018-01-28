@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -42,6 +44,8 @@ public class ArticleFragment extends Fragment {
     private static final String ARG_ARTICLE_TITLE = "article_title";
     private static final String ARG_ARTICLE_LINK = "article_link";
 
+    private boolean mSaved = false;
+
     public static ArticleFragment newInstance(String date, String title, String link){
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_ARTICLE_DATE, date);
@@ -58,6 +62,7 @@ public class ArticleFragment extends Fragment {
         mArticleTitle = (String) getArguments().getSerializable(ARG_ARTICLE_TITLE);
         mArticleDate = (String)getArguments().getSerializable(ARG_ARTICLE_DATE);
         mArticleLink = (String)getArguments().getSerializable(ARG_ARTICLE_LINK);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -84,7 +89,32 @@ public class ArticleFragment extends Fragment {
         new FetchPartsTask(mArticleLink, this).execute();
         return v;
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.article_menu, menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.share:
+                Toast.makeText(getContext(), R.string.share_button_hint, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.star:
+                if(!mSaved){
+                    mSaved = !mSaved;
+                    Toast.makeText(getContext(), R.string.added_to_favs, Toast.LENGTH_SHORT).show();
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_favorited));
+                }else{
+                    mSaved = !mSaved;
+                    Toast.makeText(getContext(), R.string.deleted_from_favs, Toast.LENGTH_SHORT).show();
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_not_favorited));
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private static class FetchPartsTask extends AsyncTask<Integer, Void, Integer>{
         private Document mDocument;

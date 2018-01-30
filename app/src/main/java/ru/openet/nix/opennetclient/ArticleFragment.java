@@ -84,7 +84,7 @@ public class ArticleFragment extends Fragment {
         }
         actionBar.getSupportActionBar().setDisplayShowHomeEnabled(true);
         actionBar.setTitle(mArticleDate);
-        mAdapter = new ArticleRecyclerViewAdapter(getContext(), mArticleTitle, mArticleDate, mArticleParts);
+        mAdapter = new ArticleRecyclerViewAdapter(getContext(), mArticleTitle, mArticleParts);
         mRecyclerView.setAdapter(mAdapter);
         new FetchPartsTask(mArticleLink, this).execute();
         return v;

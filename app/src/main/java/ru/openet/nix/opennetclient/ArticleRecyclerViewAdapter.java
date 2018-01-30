@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_HEADER = 0;
-    private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM_TEXT = 2;
     private static final int TYPE_ITEM_CODE = 3;
     private static final int TYPE_ITEM_IMAGE = 4;
@@ -27,13 +26,11 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private Context mContext;
     private ArrayList<ArticlePart> mArticleParts;
     private String mArticleTitle;
-    private String mArticleFooter;
 
-    public ArticleRecyclerViewAdapter(Context context, String title, String footer, ArrayList<ArticlePart> parts) {
+    public ArticleRecyclerViewAdapter(Context context, String title, ArrayList<ArticlePart> parts) {
         super();
         mArticleParts = parts;
         mArticleTitle = title;
-        mArticleFooter = footer;
         mContext = context;
     }
     public void setParts(ArrayList<ArticlePart> parts){
@@ -47,11 +44,6 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_header, parent, false);
             return new HeaderViewHolder(itemView);
-        } else if(viewType == TYPE_FOOTER){
-            //Inflating footer view
-            itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.article_footer, parent,false);
-            return new FooterViewHolder(itemView);
         }else if(viewType == TYPE_ITEM_TEXT){
             //Inflating text view
             itemView = LayoutInflater.from(parent.getContext())
@@ -80,9 +72,6 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         if (holder instanceof HeaderViewHolder) {
             final HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
             headerHolder.headerTitle.setText(mArticleTitle);
-        } else if (holder instanceof FooterViewHolder) {
-            final FooterViewHolder footerHolder = (FooterViewHolder) holder;
-            footerHolder.footerTitle.setText(mArticleFooter);
         }else if (holder instanceof TextPartViewHolder) {
             final TextPartViewHolder textPartViewHolder = (TextPartViewHolder) holder;
             Spanned spanned = Html.fromHtml(mArticleParts.get(position - 1).getText().replaceAll("<img.+?>", ""));
@@ -107,8 +96,6 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public int getItemViewType(int position) {
         if (position == 0) {
             return TYPE_HEADER;
-        } else if (position == mArticleParts.size() + 1) {
-            return TYPE_FOOTER;
         }else{
             if(mArticleParts.get(position - 1).getType() == ArticlePart.SIMPLE_TEXT){
                 return TYPE_ITEM_TEXT;
@@ -126,7 +113,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public int getItemCount() {
-        return mArticleParts.size() + 2;
+        return mArticleParts.size() + 1;
     }
 
     private class HeaderViewHolder extends RecyclerView.ViewHolder {
@@ -137,14 +124,14 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             headerTitle = view.findViewById(R.id.article_title);
         }
     }
-    private class FooterViewHolder extends RecyclerView.ViewHolder {
+    /*private class FooterViewHolder extends RecyclerView.ViewHolder {
         TextView footerTitle;
 
         private FooterViewHolder(View view) {
             super(view);
             footerTitle = view.findViewById(R.id.topic_links);
         }
-    }
+    }*/
     private class TextPartViewHolder extends RecyclerView.ViewHolder{
         TextView textView;
         private TextPartViewHolder(View view){

@@ -13,32 +13,33 @@
     tools:text="@string/dateview"
     android:textSize="15sp"
     android:layout_marginTop="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginBottom="3dp"/>
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/title_view"
         android:layout_below="@+id/date_view"
         tools:text="@string/titleview"
-        android:layout_marginTop="3dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/descr_view"
         android:layout_below="@+id/title_view"
         tools:text="@string/newsview"
-        android:layout_marginTop="3dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
         android:textSize="16sp"
         android:maxLines="16"
         android:ellipsize="marquee"
-        android:singleLine="false"/>
+        android:singleLine="false"
+        android:textColor="@color/colorBlack"/>
 </RelativeLayout>

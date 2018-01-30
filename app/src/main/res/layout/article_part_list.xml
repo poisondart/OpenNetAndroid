@@ -3,15 +3,19 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-    android:background="#9e9e9e">
+              android:layout_marginRight="16dp"
+              android:layout_marginLeft="16dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:elevation="4dp"
+    android:background="@color/colorWhite">
 <TextView
     android:id="@+id/article_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="6dp"
     android:background="@color/colorWhite"
-    android:layout_marginStart="15dp"
-    android:layout_marginLeft="15dp"
     android:text="@string/pl_list_part"
-    android:padding="10dp"
-    android:textSize="16sp"/>
+    android:textSize="14sp"
+    android:textColor="@color/colorBlack"/>
 </LinearLayout>

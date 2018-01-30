@@ -27,11 +27,13 @@
         android:layout_height="wrap_content">
         <ProgressBar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="6dp"
             android:id="@+id/progressbar_article"
             android:visibility="visible"
+            android:layout_alignParentTop="true"
             style="?android:attr/progressBarStyleHorizontal"
-            android:indeterminate="true"/>
+            android:indeterminate="true"
+            android:progressDrawable="@drawable/custom_article_progressbar"/>
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -41,6 +41,8 @@
         теперь производится через штатные механизмы пользовательских окружений
         (например, уведомления Chrome теперь выводятся как обычные уведомления KDE Plasma и GNOME);
     </string>
+    <string name="pl_link_part">OpenNews: Релиз Firefox 58</string>
+    <string name="show_comments_button">ПОКАЗАТЬ КОММЕНТАРИИ</string>
     <!-- Hints-->
     <string name="delete_all_hint">Удалить всё</string>
     <string name="toast_all_deteted">Все статьи удалены</string>

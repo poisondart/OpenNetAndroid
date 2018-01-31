@@ -27,40 +27,27 @@
         android:layout_height="wrap_content">
         <ProgressBar
             android:layout_width="match_parent"
-            android:layout_height="6dp"
+            android:layout_height="2dp"
             android:id="@+id/progressbar_article"
             android:visibility="visible"
             android:layout_alignParentTop="true"
             style="?android:attr/progressBarStyleHorizontal"
-            android:indeterminate="true"
+            android:indeterminate="false"
             android:progressDrawable="@drawable/custom_article_progressbar"/>
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/article_recyclerview"
             android:layout_below="@+id/progressbar_article"/>
-        <LinearLayout
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/article_recyclerview"
-            android:orientation="horizontal"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
+            android:id="@+id/show_comments_button"
             android:background="@color/colorWhite"
-            android:elevation="4dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/show_comments_button"
-                android:textStyle="bold"
-                android:layout_margin="10dp"
-                android:textColor="@color/colorPrimary"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_show_comments"
-                android:layout_margin="10dp"/>
-        </LinearLayout>
+            android:text="@string/show_comments_button"
+            android:textColor="@color/colorPrimary"
+            android:layout_below="@id/article_recyclerview"
+            android:layout_marginTop="6dp"/>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

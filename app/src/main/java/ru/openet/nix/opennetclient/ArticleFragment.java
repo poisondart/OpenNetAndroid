@@ -71,6 +71,7 @@ public class ArticleFragment extends Fragment {
         View v = inflater.inflate(R.layout.article_fragment, container, false);
         mToolbar = v.findViewById(R.id.toolbar_article);
         mProgressBar = v.findViewById(R.id.progressbar_article);
+        mProgressBar.setMax(100);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView = v.findViewById(R.id.article_recyclerview);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -116,7 +117,7 @@ public class ArticleFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private static class FetchPartsTask extends AsyncTask<Integer, Void, Integer>{
+    private static class FetchPartsTask extends AsyncTask<Integer, Integer, Integer>{
         private Document mDocument;
         private Element mElement, mElementExtraLink;
         private Elements mChilds, mExtraChilds;
@@ -134,6 +135,7 @@ public class ArticleFragment extends Fragment {
             ArticleFragment fragment = mReference.get();
             if (fragment == null) return;
             fragment.mProgressBar.setVisibility(View.VISIBLE);
+            fragment.mProgressBar.setProgress(0);
         }
 
         @Override
@@ -148,7 +150,16 @@ public class ArticleFragment extends Fragment {
             fragment.mArticle.setArticleParts(fragment.mArticleParts);
             fragment.mAdapter.setParts(fragment.mArticleParts);
             fragment.mAdapter.notifyDataSetChanged();
+            fragment.mProgressBar.setProgress(100);
             fragment.mProgressBar.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            ArticleFragment fragment = mReference.get();
+            if (fragment == null) return;
+            fragment.mProgressBar.setProgress(values[0]);
         }
 
         @Override
@@ -175,6 +186,7 @@ public class ArticleFragment extends Fragment {
                         ArticlePart articlePart = new ArticlePart(ArticlePart.IMAGE, e.attr("src"));
                         fragment.mArticleParts.add(articlePart);
                     }
+                    publishProgress(mChilds.size());
                 }
                 for(Element e : mExtraChilds){
                     if(e.tagName().equals("a")){
@@ -182,6 +194,7 @@ public class ArticleFragment extends Fragment {
                                 e.text(), e.attr("href")));
                     }
                 }
+                publishProgress(mExtraChilds.size());
                 size = mChilds.size();
             }catch (IOException e){
                 e.printStackTrace();

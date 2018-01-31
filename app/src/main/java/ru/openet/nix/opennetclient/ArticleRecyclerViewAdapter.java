@@ -96,9 +96,10 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             ((ExtraLinkPartViewHolder) holder).bindPart(mArticleParts.get(position - 1));
         }else if (holder instanceof ImagePartViewHolder) {
             final ImagePartViewHolder imagePartViewHolder = (ImagePartViewHolder) holder;
-            Glide.with(mContext)
+            GlideApp.with(mContext)
                     .load(mArticleParts.get(position - 1)
                             .getContentLink())
+                    .placeholder(R.drawable.preload)
                     .into(imagePartViewHolder.imageView);
         }
     }

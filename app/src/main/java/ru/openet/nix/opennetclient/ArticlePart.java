@@ -7,34 +7,37 @@ package ru.openet.nix.opennetclient;
 
 public class ArticlePart {
     private String mText;
-    private String mCode;
-    private String mImageLink;
+    //private String mCode;
+    private String mContentLink;
     private int mType;
 
     public static final int SIMPLE_TEXT = 0;
     public static final int IMAGE = 1;
     public static final int CODE = 2;
     public static final int LIST_ITEM = 3;
+    public static final int ETRA_LINKS_ITEM = 4;
 
     public ArticlePart(int type, String text) {
         mType = type;
-        if(type == SIMPLE_TEXT){
+        if(type == SIMPLE_TEXT || type == CODE){
             mText = text;
-            mCode = null;
-            mImageLink = null;
-        }else if(type == CODE){
-            mCode = text;
-            mText = null;
-            mImageLink = null;
+            //mCode = null;
+            mContentLink = null;
         }else if(type == IMAGE){
-            mImageLink = text;
-            mCode = null;
+            mContentLink = text;
+            //mCode = null;
             mText = null;
         }else if(type == LIST_ITEM){
             mText = text;
-            mCode = null;
-            mImageLink = null;
+            //mCode = null;
+            mContentLink = null;
         }
+    }
+
+    public ArticlePart(int type, String text, String contentLink){
+        mType = type;
+        mText = text;
+        mContentLink = contentLink;
     }
 
     public String getText() {
@@ -45,13 +48,13 @@ public class ArticlePart {
         mText = text;
     }
 
-    public String getCode() {
+    /*public String getCode() {
         return mCode;
-    }
+    }*/
 
-    public void setCode(String code) {
+    /*public void setCode(String code) {
         mCode = code;
-    }
+    }*/
 
     public int getType() {
         return mType;
@@ -61,11 +64,11 @@ public class ArticlePart {
         mType = type;
     }
 
-    public String getImageLink() {
-        return mImageLink;
+    public String getContentLink() {
+        return mContentLink;
     }
 
-    public void setImageLink(String imageLink) {
-        mImageLink = imageLink;
+    public void setContentLink(String contentLink) {
+        mContentLink = contentLink;
     }
 }

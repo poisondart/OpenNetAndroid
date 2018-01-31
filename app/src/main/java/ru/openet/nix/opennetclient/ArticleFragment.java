@@ -118,8 +118,8 @@ public class ArticleFragment extends Fragment {
 
     private static class FetchPartsTask extends AsyncTask<Integer, Void, Integer>{
         private Document mDocument;
-        private Element mElement;
-        private Elements mChilds;
+        private Element mElement, mElementExtraLink;
+        private Elements mChilds, mExtraChilds;
         private String mLink;
         private WeakReference<ArticleFragment> mReference;
 
@@ -158,7 +158,9 @@ public class ArticleFragment extends Fragment {
             try{
                 mDocument = Jsoup.connect(mLink).get();
                 mElement = mDocument.select("td[class = chtext]").first();
+                mElementExtraLink = mDocument.select("ol").first();
                 mChilds = mElement.getAllElements();
+                mExtraChilds = mElementExtraLink.getAllElements();
                 for(Element e : mChilds){
                     if(e.tagName().equals("p")){
                         ArticlePart articlePart = new ArticlePart(ArticlePart.SIMPLE_TEXT, e.html());
@@ -172,6 +174,12 @@ public class ArticleFragment extends Fragment {
                     }else if(e.tagName().equals("img")){
                         ArticlePart articlePart = new ArticlePart(ArticlePart.IMAGE, e.attr("src"));
                         fragment.mArticleParts.add(articlePart);
+                    }
+                }
+                for(Element e : mExtraChilds){
+                    if(e.tagName().equals("a")){
+                        fragment.mArticleParts.add(new ArticlePart(ArticlePart.ETRA_LINKS_ITEM,
+                                e.text(), e.attr("href")));
                     }
                 }
                 size = mChilds.size();

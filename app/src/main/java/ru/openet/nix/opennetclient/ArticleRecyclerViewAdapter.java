@@ -23,6 +23,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int TYPE_ITEM_CODE = 3;
     private static final int TYPE_ITEM_IMAGE = 4;
     private static final int TYPE_ITEM_LIST = 5;
+    private static final int TYPE_ITEM_EXTRA_LINK = 6;
     private Context mContext;
     private ArrayList<ArticlePart> mArticleParts;
     private String mArticleTitle;
@@ -64,6 +65,11 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_part_list, parent,false);
             return new ListPartViewHolder(itemView);
+        }else if(viewType == TYPE_ITEM_EXTRA_LINK){
+            //Inflating image view
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.article_extra_links_part, parent,false);
+            return new ExtraLinkPartViewHolder(itemView);
         }else return null;
     }
 
@@ -78,16 +84,19 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             textPartViewHolder.textView.setText(spanned);
         }else if (holder instanceof CodePartViewHolder) {
             final CodePartViewHolder codePartViewHolder = (CodePartViewHolder) holder;
-            codePartViewHolder.codeView.setText(mArticleParts.get(position - 1).getCode());
+            codePartViewHolder.codeView.setText(mArticleParts.get(position - 1).getText());
         }else if (holder instanceof ListPartViewHolder) {
             final ListPartViewHolder listPartViewHolder = (ListPartViewHolder) holder;
             Spanned spanned = Html.fromHtml(mArticleParts.get(position - 1).getText().replaceAll("<img.+?>", ""));
             listPartViewHolder.textView.setText(spanned);
+        }else if (holder instanceof ExtraLinkPartViewHolder) {
+            final ExtraLinkPartViewHolder extraPartViewHolder = (ExtraLinkPartViewHolder) holder;
+            extraPartViewHolder.textView.setText(mArticleParts.get(position - 1).getText());
         }else if (holder instanceof ImagePartViewHolder) {
             final ImagePartViewHolder imagePartViewHolder = (ImagePartViewHolder) holder;
             Glide.with(mContext)
                     .load(mArticleParts.get(position - 1)
-                            .getImageLink())
+                            .getContentLink())
                     .into(imagePartViewHolder.imageView);
         }
     }
@@ -105,6 +114,8 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 return TYPE_ITEM_IMAGE;
             }else if(mArticleParts.get(position - 1).getType() == ArticlePart.LIST_ITEM){
                 return TYPE_ITEM_LIST;
+            }else if(mArticleParts.get(position - 1).getType() == ArticlePart.ETRA_LINKS_ITEM){
+                return TYPE_ITEM_EXTRA_LINK;
             }else{
                 return 0;
             }
@@ -164,6 +175,13 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             textView.setMovementMethod(ClickableMovementMethod.getInstance());
             textView.setClickable(false);
             textView.setLongClickable(false);
+        }
+    }
+    private class ExtraLinkPartViewHolder extends RecyclerView.ViewHolder{
+        TextView textView;
+        public ExtraLinkPartViewHolder(View itemView) {
+            super(itemView);
+            textView = itemView.findViewById(R.id.link_textview);
         }
     }
 }

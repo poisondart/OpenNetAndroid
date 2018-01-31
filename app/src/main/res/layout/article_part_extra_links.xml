@@ -17,7 +17,7 @@
     android:drawableLeft="@drawable/ic_link"
     android:drawableStart="@drawable/ic_link"
     android:gravity="center_vertical"
-    android:drawablePadding="8dp"
+    android:drawablePadding="16dp"
     android:textColor="@color/colorPrimary"
     android:textStyle="bold"
     android:textSize="15sp"/>

@@ -68,7 +68,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }else if(viewType == TYPE_ITEM_EXTRA_LINK){
             //Inflating image view
             itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.article_extra_links_part, parent,false);
+                    .inflate(R.layout.article_part_extra_links, parent,false);
             return new ExtraLinkPartViewHolder(itemView);
         }else return null;
     }

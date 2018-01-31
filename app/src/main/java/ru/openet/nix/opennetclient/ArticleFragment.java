@@ -90,8 +90,10 @@ public class ArticleFragment extends Fragment {
         new FetchPartsTask(mArticleLink, this).execute();
         return v;
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.article_menu, menu);
     }
@@ -104,14 +106,13 @@ public class ArticleFragment extends Fragment {
                 break;
             case R.id.star:
                 if(!mSaved){
-                    mSaved = !mSaved;
                     Toast.makeText(getContext(), R.string.added_to_favs, Toast.LENGTH_SHORT).show();
                     item.setIcon(getResources().getDrawable(R.drawable.ic_favorited));
                 }else{
-                    mSaved = !mSaved;
                     Toast.makeText(getContext(), R.string.deleted_from_favs, Toast.LENGTH_SHORT).show();
                     item.setIcon(getResources().getDrawable(R.drawable.ic_not_favorited));
                 }
+                mSaved = !mSaved;
                 break;
         }
         return super.onOptionsItemSelected(item);

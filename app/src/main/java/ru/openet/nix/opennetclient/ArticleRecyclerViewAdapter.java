@@ -1,6 +1,9 @@
 package ru.openet.nix.opennetclient;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
@@ -90,8 +93,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             Spanned spanned = Html.fromHtml(mArticleParts.get(position - 1).getText().replaceAll("<img.+?>", ""));
             listPartViewHolder.textView.setText(spanned);
         }else if (holder instanceof ExtraLinkPartViewHolder) {
-            final ExtraLinkPartViewHolder extraPartViewHolder = (ExtraLinkPartViewHolder) holder;
-            extraPartViewHolder.textView.setText(mArticleParts.get(position - 1).getText());
+            ((ExtraLinkPartViewHolder) holder).bindPart(mArticleParts.get(position - 1));
         }else if (holder instanceof ImagePartViewHolder) {
             final ImagePartViewHolder imagePartViewHolder = (ImagePartViewHolder) holder;
             Glide.with(mContext)
@@ -177,11 +179,24 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             textView.setLongClickable(false);
         }
     }
-    private class ExtraLinkPartViewHolder extends RecyclerView.ViewHolder{
+    private class ExtraLinkPartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textView;
+        ArticlePart part;
         public ExtraLinkPartViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.link_textview);
+            itemView.setOnClickListener(this);
+        }
+        private void bindPart(ArticlePart articlePart){
+            part = articlePart;
+            textView.setText(part.getText());
+        }
+
+        @Override
+        public void onClick(View view) {
+            Fragment fragment = ArticleFragment.newInstance("Test", part.getText(), part.getContentLink());
+            FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
+            fragmentManager.beginTransaction().add(R.id.article_fragment_host, fragment).addToBackStack(null).commit();
         }
     }
 }

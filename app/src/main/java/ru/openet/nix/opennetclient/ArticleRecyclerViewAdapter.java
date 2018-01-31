@@ -194,7 +194,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(View view) {
-            Fragment fragment = ArticleFragment.newInstance("Test", part.getText(), part.getContentLink());
+            Fragment fragment = ArticleFragment.newInstance(null, part.getText(), part.getContentLink());
             FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
             fragmentManager.beginTransaction().add(R.id.article_fragment_host, fragment).addToBackStack(null).commit();
         }

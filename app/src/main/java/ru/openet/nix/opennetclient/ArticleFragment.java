@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +38,7 @@ public class ArticleFragment extends Fragment {
     private ArticleRecyclerViewAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
+    private AppCompatActivity mActionBar;
 
     private String mArticleTitle, mArticleDate, mArticleLink;
 
@@ -78,13 +80,17 @@ public class ArticleFragment extends Fragment {
         mRecyclerView.setNestedScrollingEnabled(false);
         mArticleParts = new ArrayList<>();
         mArticle = new Article(mArticleDate, mArticleTitle, mArticleLink);
-        AppCompatActivity actionBar = (AppCompatActivity) getActivity();
-        actionBar.setSupportActionBar(mToolbar);
-        if(actionBar.getSupportActionBar() != null){
-            actionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mActionBar = (AppCompatActivity) getActivity();
+        mActionBar.setSupportActionBar(mToolbar);
+        if(mActionBar.getSupportActionBar() != null){
+            mActionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        actionBar.getSupportActionBar().setDisplayShowHomeEnabled(true);
-        actionBar.setTitle(mArticleDate);
+        mActionBar.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if(mArticleDate != null){
+            mActionBar.setTitle(mArticleDate);
+        }else {
+            mActionBar.setTitle("...");
+        }
         mAdapter = new ArticleRecyclerViewAdapter(getContext(), mArticleTitle, mArticleParts);
         mRecyclerView.setAdapter(mAdapter);
         new FetchPartsTask(mArticleLink, this).execute();
@@ -120,7 +126,7 @@ public class ArticleFragment extends Fragment {
 
     private static class FetchPartsTask extends AsyncTask<Integer, Integer, Integer>{
         private Document mDocument;
-        private Element mElement, mElementExtraLink;
+        private Element mElement, mElementExtraLink, mElementDate;
         private Elements mChilds, mExtraChilds;
         private String mLink;
         private WeakReference<ArticleFragment> mReference;
@@ -153,6 +159,11 @@ public class ArticleFragment extends Fragment {
             fragment.mAdapter.notifyDataSetChanged();
             fragment.mProgressBar.setProgress(100);
             fragment.mProgressBar.setVisibility(View.GONE);
+            if(fragment.mArticleDate == null){
+                fragment.mArticleDate = mElementDate.text();
+                fragment.mActionBar.setTitle(fragment.mArticleDate);
+
+            }
         }
 
         @Override
@@ -173,6 +184,9 @@ public class ArticleFragment extends Fragment {
                 mElementExtraLink = mDocument.select("ol").first();
                 mChilds = mElement.getAllElements();
                 mExtraChilds = mElementExtraLink.getAllElements();
+                if(fragment.mArticleDate == null){
+                    mElementDate = mDocument.select("font").first();
+                }
                 for(Element e : mChilds){
                     if(e.tagName().equals("p")){
                         ArticlePart articlePart = new ArticlePart(ArticlePart.SIMPLE_TEXT, e.html());

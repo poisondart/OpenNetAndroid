@@ -189,7 +189,7 @@ public class BasicNewsFragment extends Fragment {
                     title = result;
                 } else if (name.equalsIgnoreCase("pubDate")) {
                     DateFormat oldDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
-                    DateFormat newDateFormat = new SimpleDateFormat("d MMMM yyyy hh:mm", new Locale("ru"));
+                    DateFormat newDateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm", new Locale("ru"));
                     try{
                         Date date = oldDateFormat.parse(result);
                         pubDate = newDateFormat.format(date);

@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.favs_item:
                                 loadFavsFragment();
                                 break;
+                            case R.id.pref_item:
+                                loadSettingsFragment();
+                                break;
                         }
                     }
                 }, 250);
@@ -89,6 +92,11 @@ public class MainActivity extends AppCompatActivity {
     private void loadFavsFragment(){
         mFragmentManager.beginTransaction().remove(mFragment).commit();
         mFragment = new SavedArticleFragment();
+        mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
+    }
+    private void loadSettingsFragment(){
+        mFragmentManager.beginTransaction().remove(mFragment).commit();
+        mFragment = new SettingsFragment();
         mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
     }
 }

@@ -1,11 +1,11 @@
 package ru.openet.nix.opennetclient;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import io.realm.RealmResults;
 
 /**
@@ -53,7 +53,11 @@ public class SavedArticleAdapter extends RecyclerView.Adapter<SavedArticleAdapte
        }
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "OK", Toast.LENGTH_SHORT).show();
+            Intent intent = ArticleHostActivity.newInstance(view.getContext(),
+                    article.getTitle(),
+                    article.getLink(),
+                    article.getDate());
+            view.getContext().startActivity(intent);
         }
     }
 }

@@ -76,7 +76,6 @@ public class SavedArticlesFragment extends Fragment {
         switch (item.getItemId()){
             case R.id.delete_all_favs:
                 deleteAllArticles();
-                Toast.makeText(getContext(), R.string.toast_all_deteted, Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -91,16 +90,23 @@ public class SavedArticlesFragment extends Fragment {
             public void execute(Realm realm) {
                 if (realm.isEmpty()){
                     Toast.makeText(getContext(), R.string.all_articles_already_deleted, Toast.LENGTH_SHORT).show();
-                    mRealm.cancelTransaction();
+                }else{
+                    Toast.makeText(getContext(), R.string.toast_all_deteted, Toast.LENGTH_SHORT).show();
+                    realm.deleteAll();
+                    mAdapter.notifyDataSetChanged();
                 }
-                realm.deleteAll();
-                mAdapter.notifyDataSetChanged();
             }
         });
     }
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         mRealm.close();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
     }
 }

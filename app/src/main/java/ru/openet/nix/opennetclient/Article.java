@@ -18,14 +18,18 @@ public class Article extends RealmObject{
     @Required
     private String mLink;
     @Ignore
-    private ArrayList<ArticlePart> mArticleParts;
+    //private ArrayList<ArticlePart> mArticleParts;
 
     public static String LINK = "mLink";
 
     public Article() {
         // это для realm
     }
-
+    public Article(Article article){
+        mDate = article.getDate();
+        mTitle = article.getTitle();
+        mLink = article.getLink();
+    }
     public Article(String date, String title, String link) {
         mDate = date;
         mTitle = title;
@@ -56,11 +60,11 @@ public class Article extends RealmObject{
         mLink = link;
     }
 
-    public ArrayList<ArticlePart> getArticleParts() {
+    /*public ArrayList<ArticlePart> getArticleParts() {
         return mArticleParts;
     }
 
     public void setArticleParts(ArrayList<ArticlePart> articleParts) {
         mArticleParts = articleParts;
-    }
+    }*/
 }

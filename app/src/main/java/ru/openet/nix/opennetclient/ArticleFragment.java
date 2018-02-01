@@ -26,8 +26,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import javax.annotation.ParametersAreNonnullByDefault;
 import io.realm.Realm;
-import io.realm.RealmObject;
-import io.realm.RealmResults;
 
 /**
  * Created by Nix on 28.01.2018.
@@ -99,10 +97,8 @@ public class ArticleFragment extends Fragment {
             mActionBar.setTitle("...");
         }
 
-        if(checkArticleInRealm(mArticleLink)){
-            mArticleParts = mArticle.getArticleParts();
-        }else {
-            new FetchPartsTask(mArticleLink, this, mArticle.getLink()).execute();
+        if(!checkArticleInRealm(mArticleLink)){
+            new FetchPartsTask(mArticleLink, this).execute();
         }
         mAdapter = new ArticleRecyclerViewAdapter(getContext(), mArticleTitle, mArticleParts);
         mRecyclerView.setAdapter(mAdapter);
@@ -131,11 +127,11 @@ public class ArticleFragment extends Fragment {
                 if(!mSaved){
                     Toast.makeText(getContext(), R.string.added_to_favs, Toast.LENGTH_SHORT).show();
                     item.setIcon(getResources().getDrawable(R.drawable.ic_favorited));
-                    addArticleToRealm(mArticle);
+                    addArticleToRealm();
                 }else{
                     Toast.makeText(getContext(), R.string.deleted_from_favs, Toast.LENGTH_SHORT).show();
                     item.setIcon(getResources().getDrawable(R.drawable.ic_not_favorited));
-                    deleteArticleFromRealm(mArticle);
+                    deleteArticleFromRealm();
                 }
                 mSaved = !mSaved;
                 break;
@@ -149,12 +145,10 @@ public class ArticleFragment extends Fragment {
         private Elements mChilds, mExtraChilds;
         private String mLink;
         private WeakReference<ArticleFragment> mReference;
-        private String mArticleLink;
 
-        public FetchPartsTask(String link, ArticleFragment reference, String articleLink) {
+        public FetchPartsTask(String link, ArticleFragment reference) {
             mLink = link;
             mReference = new WeakReference<>(reference);
-            mArticleLink = articleLink;
         }
 
         @Override
@@ -175,7 +169,6 @@ public class ArticleFragment extends Fragment {
                 Toast.makeText(fragment.getContext(), "Не удалось загрузить данные", Toast.LENGTH_SHORT).show();
                 return;
             }
-            fragment.mArticle.setArticleParts(fragment.mArticleParts);
             fragment.mAdapter.setParts(fragment.mArticleParts);
             fragment.mAdapter.notifyDataSetChanged();
             fragment.mProgressBar.setProgress(100);
@@ -210,16 +203,16 @@ public class ArticleFragment extends Fragment {
                 }
                 for(Element e : mChilds){
                     if(e.tagName().equals("p")){
-                        ArticlePart articlePart = new ArticlePart(ArticlePart.SIMPLE_TEXT, e.html(), mArticleLink);
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.SIMPLE_TEXT, e.html(), mLink);
                         fragment.mArticleParts.add(articlePart);
                     }else if(e.tagName().equals("li")){
-                        ArticlePart articlePart = new ArticlePart(ArticlePart.LIST_ITEM, e.html(), mArticleLink);
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.LIST_ITEM, e.html(), mLink);
                         fragment.mArticleParts.add(articlePart);
                     }else if(e.tagName().equals("pre")){
-                        ArticlePart articlePart = new ArticlePart(ArticlePart.CODE, e.text(), mArticleLink);
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.CODE, e.text(), mLink);
                         fragment.mArticleParts.add(articlePart);
                     }else if(e.tagName().equals("img")){
-                        ArticlePart articlePart = new ArticlePart(ArticlePart.IMAGE, e.attr("src"), mArticleLink);
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.IMAGE, e.attr("src"), mLink);
                         fragment.mArticleParts.add(articlePart);
                     }
                     publishProgress(mChilds.size());
@@ -227,7 +220,7 @@ public class ArticleFragment extends Fragment {
                 for(Element e : mExtraChilds){
                     if(e.tagName().equals("a")){
                         fragment.mArticleParts.add(new ArticlePart(ArticlePart.ETRA_LINKS_ITEM,
-                                e.text(), e.attr("href"), mArticleLink));
+                                e.text(), e.attr("href"), mLink));
                     }
                 }
                 publishProgress(mExtraChilds.size());
@@ -239,22 +232,22 @@ public class ArticleFragment extends Fragment {
         }
     }
     @ParametersAreNonnullByDefault
-    private void addArticleToRealm(final Article article){
+    private void addArticleToRealm(){
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.insertOrUpdate(article);
-                realm.insert(article.getArticleParts());
+                realm.insertOrUpdate(mArticle);
+                realm.insert(mArticleParts);
             }
         });
     }
     @ParametersAreNonnullByDefault
-    private void deleteArticleFromRealm(final Article article){
+    private void deleteArticleFromRealm(){
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(Article.class).equalTo(Article.LINK, article.getLink()).findAll().deleteAllFromRealm();
-                realm.where(ArticlePart.class).equalTo(ArticlePart.ARTICLE_LINK, mArticle.getLink())
+                realm.where(Article.class).equalTo(Article.LINK, mArticle.getLink()).findAll().deleteAllFromRealm();
+                realm.where(ArticlePart.class).equalTo(ArticlePart.ARTICLE_LINK, mArticleLink)
                         .findAll().deleteAllFromRealm();
             }
         });
@@ -268,9 +261,10 @@ public class ArticleFragment extends Fragment {
                     mSaved = false;
                 }else {
                     mArticle = realm.where(Article.class).equalTo(Article.LINK, articleLink).findAll().first();
-                    ArrayList<ArticlePart> parts = new ArrayList<>();
-                    parts.addAll(realm.where(ArticlePart.class).equalTo(ArticlePart.ARTICLE_LINK, articleLink).findAll());
-                    mArticle.setArticleParts(parts);
+                    mArticleDate = mArticle.getDate();
+                    mArticleTitle = mArticle.getTitle();
+                    mArticleLink = mArticle.getLink();
+                    mArticleParts.addAll(realm.where(ArticlePart.class).equalTo(ArticlePart.ARTICLE_LINK, articleLink).findAll());
                     mSaved = true;
                 }
             }

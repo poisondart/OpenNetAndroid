@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 /**
@@ -27,6 +26,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int TYPE_ITEM_IMAGE = 4;
     private static final int TYPE_ITEM_LIST = 5;
     private static final int TYPE_ITEM_EXTRA_LINK = 6;
+    private int mFirstExtraLinkPosition = -1;
     private Context mContext;
     private ArrayList<ArticlePart> mArticleParts;
     private String mArticleTitle;
@@ -93,7 +93,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             Spanned spanned = Html.fromHtml(mArticleParts.get(position - 1).getText().replaceAll("<img.+?>", ""));
             listPartViewHolder.textView.setText(spanned);
         }else if (holder instanceof ExtraLinkPartViewHolder) {
-            ((ExtraLinkPartViewHolder) holder).bindPart(mArticleParts.get(position - 1));
+            ((ExtraLinkPartViewHolder) holder).bindPart(mArticleParts.get(position - 1), position - 1);
         }else if (holder instanceof ImagePartViewHolder) {
             final ImagePartViewHolder imagePartViewHolder = (ImagePartViewHolder) holder;
             GlideApp.with(mContext)
@@ -118,6 +118,9 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             }else if(mArticleParts.get(position - 1).getType() == ArticlePart.LIST_ITEM){
                 return TYPE_ITEM_LIST;
             }else if(mArticleParts.get(position - 1).getType() == ArticlePart.ETRA_LINKS_ITEM){
+                if(mFirstExtraLinkPosition < 0){
+                    mFirstExtraLinkPosition = position - 1;
+                }
                 return TYPE_ITEM_EXTRA_LINK;
             }else{
                 return 0;
@@ -183,20 +186,27 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private class ExtraLinkPartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textView;
         ArticlePart part;
+        int pos;
         public ExtraLinkPartViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.link_textview);
             itemView.setOnClickListener(this);
         }
-        private void bindPart(ArticlePart articlePart){
+        private void bindPart(ArticlePart articlePart, int p){
             part = articlePart;
             textView.setText(part.getText());
+            pos = p;
         }
 
         @Override
         public void onClick(View view) {
-            Fragment fragment = ArticleFragment.newInstance(null, part.getText(), part.getContentLink());
+            Fragment fragment;
             FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
+            if(pos == mFirstExtraLinkPosition){
+                fragment = WebViewFragment.newInstance(part.getContentLink());
+            }else {
+                fragment = ArticleFragment.newInstance(null, part.getText(), part.getContentLink());
+            }
             fragmentManager.beginTransaction().add(R.id.article_fragment_host, fragment).addToBackStack(null).commit();
         }
     }

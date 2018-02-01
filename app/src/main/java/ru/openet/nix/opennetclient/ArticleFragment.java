@@ -80,6 +80,7 @@ public class ArticleFragment extends Fragment {
         mProgressBar = v.findViewById(R.id.progressbar_article);
         mArticleParts = new ArrayList<>();
         mProgressBar.setMax(100);
+        setHasOptionsMenu(true);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView = v.findViewById(R.id.article_recyclerview);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -107,8 +108,8 @@ public class ArticleFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
         inflater.inflate(R.menu.article_menu, menu);
         if (mSaved){
             menu.getItem(0).setIcon(R.drawable.ic_favorited);
@@ -272,8 +273,8 @@ public class ArticleFragment extends Fragment {
         return mSaved;
     }
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         mRealm.close();
     }
 }

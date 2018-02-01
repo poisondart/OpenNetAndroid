@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 
+import io.realm.RealmResults;
+
 /**
  * Created by Nix on 28.01.2018.
  */

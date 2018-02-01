@@ -16,25 +16,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import java.util.ArrayList;
+import javax.annotation.ParametersAreNonnullByDefault;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by Nix on 09.01.2018.
  */
 
-public class SavedArticleFragment extends Fragment {
+public class SavedArticlesFragment extends Fragment {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-    private ArrayList<Article> mArticles;
+    private RealmResults<Article> mArticles;
     private RecyclerView mRecyclerView;
     private SavedArticleAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
+
+    private Realm mRealm;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        Realm.init(getContext());
+        mRealm = Realm.getDefaultInstance();
     }
 
     @Nullable
@@ -54,7 +59,7 @@ public class SavedArticleFragment extends Fragment {
                 R.string.app_name);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        mArticles = setArticles();
+        mArticles = getArticles();
         mAdapter = new SavedArticleAdapter(mArticles);
         mRecyclerView.setAdapter(mAdapter);
         return v;
@@ -70,15 +75,32 @@ public class SavedArticleFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.delete_all_favs:
+                deleteAllArticles();
                 Toast.makeText(getContext(), R.string.toast_all_deteted, Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
-    private ArrayList<Article> setArticles(){
-        ArrayList<Article> articles = new ArrayList<>();
-        for(int i = 0; i < 7; i++){
-            articles.add(new Article(getString(R.string.dateview), getString(R.string.titleview), "Link"));
-        }
-        return articles;
+
+    private RealmResults<Article> getArticles(){
+        return mRealm.where(Article.class).findAll();
+    }
+    @ParametersAreNonnullByDefault
+    private void deleteAllArticles(){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (realm.isEmpty()){
+                    Toast.makeText(getContext(), R.string.all_articles_already_deleted, Toast.LENGTH_SHORT).show();
+                    mRealm.cancelTransaction();
+                }
+                realm.deleteAll();
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        mRealm.close();
     }
 }

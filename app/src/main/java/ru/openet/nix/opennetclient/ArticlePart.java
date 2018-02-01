@@ -1,13 +1,19 @@
 package ru.openet.nix.opennetclient;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Required;
 
 /**
  * Created by Nix on 28.01.2018.
  */
 
-public class ArticlePart {
+public class ArticlePart extends RealmObject{
+    @Required
+    private String mArticleLink;
+    @Required
     private String mText;
     //private String mCode;
+    @Required
     private String mContentLink;
     private int mType;
 
@@ -17,8 +23,15 @@ public class ArticlePart {
     public static final int LIST_ITEM = 3;
     public static final int ETRA_LINKS_ITEM = 4;
 
-    public ArticlePart(int type, String text) {
+    public static String ARTICLE_LINK = "mArticleLink";
+
+    public ArticlePart() {
+        //это для realm
+    }
+
+    public ArticlePart(int type, String text, String link) {
         mType = type;
+        mArticleLink = link;
         if(type == SIMPLE_TEXT || type == CODE){
             mText = text;
             //mCode = null;
@@ -34,10 +47,11 @@ public class ArticlePart {
         }
     }
 
-    public ArticlePart(int type, String text, String contentLink){
+    public ArticlePart(int type, String text, String contentLink, String link){
         mType = type;
         mText = text;
         mContentLink = contentLink;
+        mArticleLink = link;
     }
 
     public String getText() {
@@ -70,5 +84,9 @@ public class ArticlePart {
 
     public void setContentLink(String contentLink) {
         mContentLink = contentLink;
+    }
+
+    public String getArticleLink() {
+        return mArticleLink;
     }
 }

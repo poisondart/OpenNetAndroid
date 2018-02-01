@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void loadFavsFragment(){
         mFragmentManager.beginTransaction().remove(mFragment).commit();
-        mFragment = new SavedArticleFragment();
+        mFragment = new SavedArticlesFragment();
         mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
     }
     private void loadSettingsFragment(){

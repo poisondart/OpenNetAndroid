@@ -46,6 +46,7 @@
     <!-- Hints-->
     <string name="delete_all_hint">Удалить всё</string>
     <string name="toast_all_deteted">Все статьи удалены</string>
+    <string name="all_articles_already_deleted">Здесь и так ничего нет</string>
     <string name="share_button_hint">Поделиться</string>
     <string name="to_favs_button_hint">Сохранить</string>
     <string name="added_to_favs">Добавлено в избранные статьи</string>

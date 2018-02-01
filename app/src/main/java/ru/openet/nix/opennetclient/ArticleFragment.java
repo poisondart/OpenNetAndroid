@@ -2,13 +2,13 @@ package ru.openet.nix.opennetclient;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +24,10 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import javax.annotation.ParametersAreNonnullByDefault;
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 /**
  * Created by Nix on 28.01.2018.
@@ -39,6 +43,7 @@ public class ArticleFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private AppCompatActivity mActionBar;
+    private Realm mRealm;
 
     private String mArticleTitle, mArticleDate, mArticleLink;
 
@@ -46,7 +51,7 @@ public class ArticleFragment extends Fragment {
     private static final String ARG_ARTICLE_TITLE = "article_title";
     private static final String ARG_ARTICLE_LINK = "article_link";
 
-    private boolean mSaved = false;
+    private boolean mSaved;
 
     public static ArticleFragment newInstance(String date, String title, String link){
         Bundle bundle = new Bundle();
@@ -65,20 +70,22 @@ public class ArticleFragment extends Fragment {
         mArticleDate = (String)getArguments().getSerializable(ARG_ARTICLE_DATE);
         mArticleLink = (String)getArguments().getSerializable(ARG_ARTICLE_LINK);
         setHasOptionsMenu(true);
+        Realm.init(getContext());
+        mRealm = Realm.getDefaultInstance();
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.article_fragment, container, false);
         mToolbar = v.findViewById(R.id.toolbar_article);
         mProgressBar = v.findViewById(R.id.progressbar_article);
+        mArticleParts = new ArrayList<>();
         mProgressBar.setMax(100);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView = v.findViewById(R.id.article_recyclerview);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setNestedScrollingEnabled(false);
-        mArticleParts = new ArrayList<>();
         mArticle = new Article(mArticleDate, mArticleTitle, mArticleLink);
         mActionBar = (AppCompatActivity) getActivity();
         mActionBar.setSupportActionBar(mToolbar);
@@ -91,9 +98,14 @@ public class ArticleFragment extends Fragment {
         }else {
             mActionBar.setTitle("...");
         }
+
+        if(checkArticleInRealm(mArticleLink)){
+            mArticleParts = mArticle.getArticleParts();
+        }else {
+            new FetchPartsTask(mArticleLink, this, mArticle.getLink()).execute();
+        }
         mAdapter = new ArticleRecyclerViewAdapter(getContext(), mArticleTitle, mArticleParts);
         mRecyclerView.setAdapter(mAdapter);
-        new FetchPartsTask(mArticleLink, this).execute();
         return v;
     }
 
@@ -102,6 +114,11 @@ public class ArticleFragment extends Fragment {
         menu.clear();
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.article_menu, menu);
+        if (mSaved){
+            menu.getItem(0).setIcon(R.drawable.ic_favorited);
+        }else {
+            menu.getItem(0).setIcon(R.drawable.ic_not_favorited);
+        }
     }
 
     @Override
@@ -114,9 +131,11 @@ public class ArticleFragment extends Fragment {
                 if(!mSaved){
                     Toast.makeText(getContext(), R.string.added_to_favs, Toast.LENGTH_SHORT).show();
                     item.setIcon(getResources().getDrawable(R.drawable.ic_favorited));
+                    addArticleToRealm(mArticle);
                 }else{
                     Toast.makeText(getContext(), R.string.deleted_from_favs, Toast.LENGTH_SHORT).show();
                     item.setIcon(getResources().getDrawable(R.drawable.ic_not_favorited));
+                    deleteArticleFromRealm(mArticle);
                 }
                 mSaved = !mSaved;
                 break;
@@ -130,10 +149,12 @@ public class ArticleFragment extends Fragment {
         private Elements mChilds, mExtraChilds;
         private String mLink;
         private WeakReference<ArticleFragment> mReference;
+        private String mArticleLink;
 
-        public FetchPartsTask(String link, ArticleFragment reference) {
+        public FetchPartsTask(String link, ArticleFragment reference, String articleLink) {
             mLink = link;
             mReference = new WeakReference<>(reference);
+            mArticleLink = articleLink;
         }
 
         @Override
@@ -162,7 +183,7 @@ public class ArticleFragment extends Fragment {
             if(fragment.mArticleDate == null){
                 fragment.mArticleDate = mElementDate.text();
                 fragment.mActionBar.setTitle(fragment.mArticleDate);
-
+                fragment.mArticle.setDate(fragment.mArticleDate);
             }
         }
 
@@ -189,16 +210,16 @@ public class ArticleFragment extends Fragment {
                 }
                 for(Element e : mChilds){
                     if(e.tagName().equals("p")){
-                        ArticlePart articlePart = new ArticlePart(ArticlePart.SIMPLE_TEXT, e.html());
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.SIMPLE_TEXT, e.html(), mArticleLink);
                         fragment.mArticleParts.add(articlePart);
                     }else if(e.tagName().equals("li")){
-                        ArticlePart articlePart = new ArticlePart(ArticlePart.LIST_ITEM, e.html());
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.LIST_ITEM, e.html(), mArticleLink);
                         fragment.mArticleParts.add(articlePart);
                     }else if(e.tagName().equals("pre")){
-                        ArticlePart articlePart = new ArticlePart(ArticlePart.CODE, e.text());
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.CODE, e.text(), mArticleLink);
                         fragment.mArticleParts.add(articlePart);
                     }else if(e.tagName().equals("img")){
-                        ArticlePart articlePart = new ArticlePart(ArticlePart.IMAGE, e.attr("src"));
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.IMAGE, e.attr("src"), mArticleLink);
                         fragment.mArticleParts.add(articlePart);
                     }
                     publishProgress(mChilds.size());
@@ -206,7 +227,7 @@ public class ArticleFragment extends Fragment {
                 for(Element e : mExtraChilds){
                     if(e.tagName().equals("a")){
                         fragment.mArticleParts.add(new ArticlePart(ArticlePart.ETRA_LINKS_ITEM,
-                                e.text(), e.attr("href")));
+                                e.text(), e.attr("href"), mArticleLink));
                     }
                 }
                 publishProgress(mExtraChilds.size());
@@ -216,5 +237,49 @@ public class ArticleFragment extends Fragment {
             }
             return size;
         }
+    }
+    @ParametersAreNonnullByDefault
+    private void addArticleToRealm(final Article article){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(article);
+                realm.insert(article.getArticleParts());
+            }
+        });
+    }
+    @ParametersAreNonnullByDefault
+    private void deleteArticleFromRealm(final Article article){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(Article.class).equalTo(Article.LINK, article.getLink()).findAll().deleteAllFromRealm();
+                realm.where(ArticlePart.class).equalTo(ArticlePart.ARTICLE_LINK, mArticle.getLink())
+                        .findAll().deleteAllFromRealm();
+            }
+        });
+    }
+    @ParametersAreNonnullByDefault
+    private boolean checkArticleInRealm(final String articleLink){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if(realm.where(Article.class).equalTo(Article.LINK, articleLink).findAll().isEmpty()){
+                    mSaved = false;
+                }else {
+                    mArticle = realm.where(Article.class).equalTo(Article.LINK, articleLink).findAll().first();
+                    ArrayList<ArticlePart> parts = new ArrayList<>();
+                    parts.addAll(realm.where(ArticlePart.class).equalTo(ArticlePart.ARTICLE_LINK, articleLink).findAll());
+                    mArticle.setArticleParts(parts);
+                    mSaved = true;
+                }
+            }
+        });
+        return mSaved;
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        mRealm.close();
     }
 }

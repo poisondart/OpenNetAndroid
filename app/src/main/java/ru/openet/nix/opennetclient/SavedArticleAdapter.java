@@ -6,17 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
+import io.realm.RealmResults;
 
 /**
  * Created by Nix on 01.02.2018.
  */
 
 public class SavedArticleAdapter extends RecyclerView.Adapter<SavedArticleAdapter.SavedViewHolder> {
-    private ArrayList<Article> mArticles;
+    private RealmResults<Article> mArticles;
 
-    public SavedArticleAdapter(ArrayList<Article> articles) {
+    public SavedArticleAdapter(RealmResults<Article> articles) {
         mArticles = articles;
     }
 

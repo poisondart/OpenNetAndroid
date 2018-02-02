@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    android:clickable="true"
-    android:focusable="true"
     tools:context="ru.openet.nix.opennetclient.ArticleHostActivity">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -19,9 +17,7 @@
             android:minHeight="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:layout_scrollFlags="scroll|enterAlways"
-            android:id="@+id/toolbar_article"
-            android:clickable="true"
-            android:focusable="true"/>
+            android:id="@+id/toolbar_article"/>
     </android.support.design.widget.AppBarLayout>
 <android.support.v4.widget.NestedScrollView
     android:layout_width="match_parent"

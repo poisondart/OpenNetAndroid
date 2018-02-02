@@ -24,6 +24,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import io.realm.Realm;
 
@@ -42,6 +44,9 @@ public class ArticleFragment extends Fragment {
     private LinearLayoutManager mLinearLayoutManager;
     private AppCompatActivity mActionBar;
     private Realm mRealm;
+
+    private static final int MENU_ADD = Menu.FIRST;
+    private static final int MENU_SHARE = Menu.FIRST + 1;
 
     private String mArticleTitle, mArticleDate, mArticleLink;
 
@@ -106,8 +111,9 @@ public class ArticleFragment extends Fragment {
         return v;
     }
 
-    @Override
+    /*@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.article_menu, menu);
@@ -116,15 +122,77 @@ public class ArticleFragment extends Fragment {
         }else {
             menu.getItem(0).setIcon(R.drawable.ic_not_favorited);
         }
-    }
+    }*/
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        Random random = new Random();
+        int k = random.nextInt(100);
+        int j = random.nextInt(100);
+        menu.clear();
+        /*menu.add(Menu.NONE, k, 0, R.string.to_favs_button_hint).setVisible(true).setShowAsActionFlags(
+                MenuItem.SHOW_AS_ACTION_WITH_TEXT |
+                        MenuItem.SHOW_AS_ACTION_ALWAYS
+        );
+        menu.add(Menu.NONE, j, 1, R.string.share_button_hint).setIcon(R.drawable.ic_share).setVisible(true).setShowAsActionFlags(
+                MenuItem.SHOW_AS_ACTION_WITH_TEXT |
+                        MenuItem.SHOW_AS_ACTION_ALWAYS
+        );
+        if (mSaved){
+            menu.getItem(k).setIcon(R.drawable.ic_favorited);
+        }else {
+            menu.getItem(k).setIcon(R.drawable.ic_not_favorited);
+        }*/
+        MenuItem item = menu.add(Menu.NONE, k, 0, R.string.to_favs_button_hint).setShowAsActionFlags(
+                MenuItem.SHOW_AS_ACTION_WITH_TEXT |
+                        MenuItem.SHOW_AS_ACTION_ALWAYS
+        );
+        MenuItem item1 = menu.add(Menu.NONE, j, 1, R.string.share_button_hint)
+                .setIcon(R.drawable.ic_share).setVisible(true).setShowAsActionFlags(
+                MenuItem.SHOW_AS_ACTION_WITH_TEXT |
+                        MenuItem.SHOW_AS_ACTION_ALWAYS
+        );
+        if (mSaved){
+            item.setIcon(R.drawable.ic_favorited);
+        }else {
+            item.setIcon(R.drawable.ic_not_favorited);
+        }
+
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if(!mSaved){
+                    Toast.makeText(getContext(), R.string.added_to_favs, Toast.LENGTH_SHORT).show();
+                    menuItem.setIcon(getResources().getDrawable(R.drawable.ic_favorited));
+                    addArticleToRealm();
+                }else{
+                    Toast.makeText(getContext(), R.string.deleted_from_favs, Toast.LENGTH_SHORT).show();
+                    menuItem.setIcon(getResources().getDrawable(R.drawable.ic_not_favorited));
+                    deleteArticleFromRealm();
+                }
+                mSaved = !mSaved;
+                return true;
+            }
+        });
+
+        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Toast.makeText(getContext(), R.string.share_button_hint, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.share:
+        switch (item.getOrder()){
+            case MENU_SHARE:
                 Toast.makeText(getContext(), R.string.share_button_hint, Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.star:
+            case MENU_ADD:
                 if(!mSaved){
                     Toast.makeText(getContext(), R.string.added_to_favs, Toast.LENGTH_SHORT).show();
                     item.setIcon(getResources().getDrawable(R.drawable.ic_favorited));
@@ -138,7 +206,7 @@ public class ArticleFragment extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     private static class FetchPartsTask extends AsyncTask<Integer, Integer, Integer>{
         private Document mDocument;

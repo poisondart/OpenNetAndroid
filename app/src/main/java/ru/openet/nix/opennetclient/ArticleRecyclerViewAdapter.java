@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
@@ -13,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
-
-import io.realm.RealmResults;
 
 /**
  * Created by Nix on 28.01.2018.
@@ -203,7 +202,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @Override
         public void onClick(View view) {
             Fragment fragment;
-            FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
+            FragmentManager fragmentManager = ((AppCompatActivity) mContext).getSupportFragmentManager();
             if(pos == mFirstExtraLinkPosition){
                 fragment = WebViewFragment.newInstance(part.getContentLink());
             }else {

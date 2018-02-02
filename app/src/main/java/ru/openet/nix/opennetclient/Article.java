@@ -1,9 +1,7 @@
 package ru.openet.nix.opennetclient;
 
-import java.util.ArrayList;
 import io.realm.RealmObject;
-import io.realm.RealmResults;
-import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 /**
@@ -13,12 +11,11 @@ import io.realm.annotations.Required;
 public class Article extends RealmObject{
     @Required
     private String mDate;
+    @PrimaryKey
     @Required
     private String mTitle;
     @Required
     private String mLink;
-    @Ignore
-    //private ArrayList<ArticlePart> mArticleParts;
 
     public static String LINK = "mLink";
 
@@ -60,11 +57,4 @@ public class Article extends RealmObject{
         mLink = link;
     }
 
-    /*public ArrayList<ArticlePart> getArticleParts() {
-        return mArticleParts;
-    }
-
-    public void setArticleParts(ArrayList<ArticlePart> articleParts) {
-        mArticleParts = articleParts;
-    }*/
 }

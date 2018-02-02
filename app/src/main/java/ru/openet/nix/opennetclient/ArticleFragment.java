@@ -126,39 +126,23 @@ public class ArticleFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        Random random = new Random();
-        int k = random.nextInt(100);
-        int j = random.nextInt(100);
         menu.clear();
-        /*menu.add(Menu.NONE, k, 0, R.string.to_favs_button_hint).setVisible(true).setShowAsActionFlags(
+        MenuItem menuItemSave = menu.add(Menu.NONE, R.id.star, 0, R.string.to_favs_button_hint).setShowAsActionFlags(
                 MenuItem.SHOW_AS_ACTION_WITH_TEXT |
                         MenuItem.SHOW_AS_ACTION_ALWAYS
         );
-        menu.add(Menu.NONE, j, 1, R.string.share_button_hint).setIcon(R.drawable.ic_share).setVisible(true).setShowAsActionFlags(
-                MenuItem.SHOW_AS_ACTION_WITH_TEXT |
-                        MenuItem.SHOW_AS_ACTION_ALWAYS
-        );
-        if (mSaved){
-            menu.getItem(k).setIcon(R.drawable.ic_favorited);
-        }else {
-            menu.getItem(k).setIcon(R.drawable.ic_not_favorited);
-        }*/
-        MenuItem item = menu.add(Menu.NONE, k, 0, R.string.to_favs_button_hint).setShowAsActionFlags(
-                MenuItem.SHOW_AS_ACTION_WITH_TEXT |
-                        MenuItem.SHOW_AS_ACTION_ALWAYS
-        );
-        MenuItem item1 = menu.add(Menu.NONE, j, 1, R.string.share_button_hint)
+        MenuItem menuItemShare = menu.add(Menu.NONE, R.id.share, 1, R.string.share_button_hint)
                 .setIcon(R.drawable.ic_share).setVisible(true).setShowAsActionFlags(
                 MenuItem.SHOW_AS_ACTION_WITH_TEXT |
                         MenuItem.SHOW_AS_ACTION_ALWAYS
         );
         if (mSaved){
-            item.setIcon(R.drawable.ic_favorited);
+            menuItemSave.setIcon(R.drawable.ic_favorited);
         }else {
-            item.setIcon(R.drawable.ic_not_favorited);
+            menuItemSave.setIcon(R.drawable.ic_not_favorited);
         }
 
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        menuItemSave.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 if(!mSaved){
@@ -175,7 +159,7 @@ public class ArticleFragment extends Fragment {
             }
         });
 
-        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        menuItemShare.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Toast.makeText(getContext(), R.string.share_button_hint, Toast.LENGTH_SHORT).show();

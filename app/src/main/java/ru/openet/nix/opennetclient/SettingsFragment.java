@@ -18,11 +18,13 @@ import java.io.InputStreamReader;
  * Created by Nix on 01.02.2018.
  */
 
-public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener,
-        Preference.OnPreferenceChangeListener{
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener{
     private Preference mAboutPreference, mLicencePreference, mDevPreference;
     private CheckBoxPreference mBrowserPreference, mThemePreference;
     private String mMessage;
+
+    public static final String KEY_BROWSER_TYPE = "b_key";
+    public static final String KEY_THEME_TYPE = "t_key";
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -45,8 +47,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         mAboutPreference.setOnPreferenceClickListener(this);
         mLicencePreference.setOnPreferenceClickListener(this);
         mDevPreference.setOnPreferenceClickListener(this);
-        mBrowserPreference.setOnPreferenceChangeListener(this);
-        mThemePreference.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -65,19 +65,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 break;
             case "l_key":
                 showLicenses();
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        switch (preference.getKey()){
-            case "b_key":
-
-                break;
-            case "t_key":
-
                 break;
         }
         return true;

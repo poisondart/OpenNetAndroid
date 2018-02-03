@@ -1,6 +1,10 @@
 package ru.openet.nix.opennetclient;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -201,9 +205,17 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(View view) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+            boolean isbrowser = preferences.getBoolean(SettingsFragment.KEY_BROWSER_TYPE, true);
             Fragment fragment;
             FragmentManager fragmentManager = ((AppCompatActivity) mContext).getSupportFragmentManager();
             if(pos == mFirstExtraLinkPosition){
+                if(!isbrowser){
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(part.getContentLink()));
+                    view.getContext().startActivity(i);
+                    return;
+                }
                 fragment = WebViewFragment.newInstance(part.getContentLink());
             }else {
                 fragment = ArticleFragment.newInstance(null, part.getText(), part.getContentLink());

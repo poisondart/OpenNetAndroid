@@ -5,11 +5,13 @@
         <CheckBoxPreference
             android:key="@string/browser_key"
             android:title="@string/browser"
-            android:summary="@string/browser_des"/>
+            android:summary="@string/browser_des"
+            android:defaultValue="true"/>
         <CheckBoxPreference
             android:key="@string/theme_key"
             android:title="@string/theme"
-            android:summary="@string/theme_des"/>
+            android:summary="@string/theme_des"
+            android:defaultValue="false"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/about_cath">

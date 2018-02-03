@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/common_cat">
+        <CheckBoxPreference
+            android:key="@string/browser_key"
+            android:title="@string/browser"
+            android:summary="@string/browser_des"/>
+        <CheckBoxPreference
+            android:key="@string/theme_key"
+            android:title="@string/theme"
+            android:summary="@string/theme_des"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/about_cath">
+        <Preference
+            android:key="@string/app_key"
+            android:title="@string/app_title"
+            android:summary="@string/app_subtitle"/>
+        <Preference
+            android:key="@string/go_dev_key"
+            android:title="@string/go_dev"
+            android:summary="@string/dev_email"/>
+        <Preference
+            android:key="@string/licence_key"
+            android:title="@string/licence"/>
+        <Preference
+            android:title="@string/go_site">
+            <intent android:action="android.intent.action.VIEW"
+                    android:data="https://www.opennet.ru" />
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

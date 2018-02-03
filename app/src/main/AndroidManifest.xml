@@ -11,18 +11,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize">
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ArticleHostActivity"
-            android:theme="@style/AppThemeArticle"
+        <activity
+            android:name=".ArticleHostActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
+            android:theme="@style/AppThemeArticle">
+        </activity>
+        <activity android:name=".SettingsHolderActivity">
         </activity>
     </application>
 

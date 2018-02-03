@@ -1,5 +1,6 @@
 package ru.openet.nix.opennetclient;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -95,8 +96,7 @@ public class MainActivity extends AppCompatActivity {
         mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
     }
     private void loadSettingsFragment(){
-        mFragmentManager.beginTransaction().remove(mFragment).commit();
-        mFragment = new SettingsFragment();
-        mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
+        Intent intent = new Intent(MainActivity.this, SettingsHolderActivity.class);
+        startActivity(intent);
     }
 }

@@ -57,5 +57,23 @@
     <string name="proof_des_all">Удалить все статьи?</string>
     <string name="cancel">ОТМЕНА</string>
     <string name="yes">УДАЛИТЬ</string>
-    <!-- -->
+    <!-- Settings-->
+    <string name="common_cat">Общие</string>
+    <string name="browser">Встроенный браузер</string>
+    <string name="browser_des">Окрывать внешние ссылки через приложение, если это возможно</string>
+    <string name="browser_key">b_key</string>
+    <string name="theme">Ночная тема</string>
+    <string name="theme_des">Тема изменится после перезапуска приложения</string>
+    <string name="theme_key">t_key</string>
+    <string name="about_cath">О программе</string>
+    <string name="licence">Лицензии</string>
+    <string name="licence_key">l_key</string>
+    <string name="app_title">Проект OpenNET</string>
+    <string name="app_subtitle">Неофициальное приложение под Android</string>
+    <string name="app_key">a_key</string>
+    <string name="app_vesion">0.7.0-alpha. Сборка от 03.02.2018</string>
+    <string name="go_site">Посетить сайт opennet.ru</string>
+    <string name="go_dev">Связаться с разработчиком</string>
+    <string name="go_dev_key">dev_key</string>
+    <string name="dev_email">carpuninnandroid@yandex.ru</string>
 </resources>

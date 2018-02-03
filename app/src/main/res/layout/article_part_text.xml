@@ -13,6 +13,6 @@
     android:layout_marginRight="16dp"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
-    android:textSize="16sp"
-    android:textColor="@color/colorBlack"/>
+    android:textSize="18sp"
+    android:textColor="@color/colorText"/>
 </LinearLayout>

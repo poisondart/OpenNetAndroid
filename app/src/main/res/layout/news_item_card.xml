@@ -9,7 +9,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/date_view"
     android:textStyle="bold"
-    android:textColor="@color/colorPrimary"
+    android:textColor="@color/dateColor"
     tools:text="@string/dateview"
     android:textSize="15sp"
     android:layout_marginTop="10dp"
@@ -26,7 +26,7 @@
         android:layout_marginRight="16dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/colorBlack"/>
+        android:textColor="@color/colorText"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,5 +40,5 @@
         android:textSize="16sp"
         android:maxLines="16"
         android:singleLine="false"
-        android:textColor="@color/colorBlack"/>
+        android:textColor="@color/colorText"/>
 </RelativeLayout>

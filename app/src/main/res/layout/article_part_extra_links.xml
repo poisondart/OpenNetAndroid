@@ -3,8 +3,8 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-    android:background="@color/colorWhite"
-    android:elevation="4dp">
+    android:elevation="4dp"
+    android:background="@color/colorBackground">
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
     android:drawableStart="@drawable/ic_link"
     android:gravity="center_vertical"
     android:drawablePadding="16dp"
-    android:textColor="@color/colorPrimary"
+    android:textColor="@color/dateColor"
     android:textStyle="bold"
     android:textSize="15sp"/>
     <View

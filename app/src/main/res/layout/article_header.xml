@@ -13,7 +13,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"
-        android:textSize="23sp"
+        android:textSize="25sp"
         android:textStyle="bold"
-        android:textColor="@color/colorBlack"/>
+        android:textColor="@color/colorText"/>
 </LinearLayout>

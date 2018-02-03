@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/common_cat_layout"
             android:layout_marginTop="?attr/actionBarSize"
-            android:background="@color/colorWhite"
+            android:background="@color/colorBackground"
             android:layout_marginBottom="6dp"
             android:orientation="vertical"
             android:elevation="4dp">
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/common_cat_layout"
-            android:background="@color/colorWhite"
+            android:background="@color/colorBackground"
             android:orientation="vertical"
             android:elevation="4dp">
             <TextView

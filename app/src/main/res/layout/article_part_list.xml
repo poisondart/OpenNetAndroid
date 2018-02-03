@@ -8,14 +8,13 @@
     android:layout_marginTop="4dp"
     android:layout_marginBottom="6dp"
     android:elevation="4dp"
-    android:background="@color/colorWhite">
+    android:background="@color/colorBackground">
 <TextView
     android:id="@+id/article_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:background="@color/colorWhite"
     android:text="@string/pl_list_part"
-    android:textSize="14sp"
-    android:textColor="@color/colorBlack"/>
+    android:textSize="16sp"
+    android:textColor="@color/colorText"/>
 </LinearLayout>

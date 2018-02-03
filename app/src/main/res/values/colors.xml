@@ -3,7 +3,8 @@
     <color name="colorPrimary">#43A047</color>
     <color name="colorPrimaryDark">#2E7D32</color>
     <color name="colorAccent">#FF6F00</color>
-    <color name="colorBlack">#000000</color>
-    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorText">#000000</color>
+    <color name="colorBackground">#FFFFFF</color>
     <color name="colorGrey">#f5f5f5</color>
+    <color name="dateColor">#43A047</color>
 </resources>

@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +25,6 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.ParametersAreNonnullByDefault;
 import io.realm.Realm;
 
@@ -38,9 +36,8 @@ public class ArticleFragment extends Fragment {
 
     private Toolbar mToolbar;
     private ProgressBar mProgressBar;
-    private Article mArticle, mArticleCache;
+    private Article mArticle;
     private ArrayList<ArticlePart> mArticleParts;
-    private List mArticlePartsCache;
     private ArticleRecyclerViewAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -83,7 +80,7 @@ public class ArticleFragment extends Fragment {
         mToolbar = v.findViewById(R.id.toolbar_article);
         mProgressBar = v.findViewById(R.id.progressbar_article);
         mArticleParts = new ArrayList<>();
-        mArticlePartsCache = new ArrayList<>();
+        //mArticlePartsCache = new ArrayList<>();
         mProgressBar.setMax(100);
         setHasOptionsMenu(true);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
@@ -140,7 +137,6 @@ public class ArticleFragment extends Fragment {
         menu.getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                //Toast.makeText(getContext(), R.string.share_button_hint, Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("text/plain");
                 i.putExtra(Intent.EXTRA_TEXT, mArticleLink);
@@ -248,17 +244,8 @@ public class ArticleFragment extends Fragment {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                if(!mArticle.isValid()){
-                    Log.d("Not valid ", "kek");
-                    mArticle = new Article(mArticleCache);
-                    mArticleParts.clear();
-                    mArticleParts.addAll(mArticlePartsCache);
-                    realm.copyToRealmOrUpdate(mArticle);
-                    realm.copyToRealm(mArticleParts);
-                }else{
-                    realm.copyToRealmOrUpdate(mArticle);
-                    realm.copyToRealm(mArticleParts);
-                }
+                realm.copyToRealmOrUpdate(mArticle);
+                realm.copyToRealm(mArticleParts);
             }
         });
     }
@@ -281,14 +268,13 @@ public class ArticleFragment extends Fragment {
                 if(realm.where(Article.class).equalTo(Article.LINK, articleLink).findAll().isEmpty()){
                     mSaved = false;
                 }else {
-                    mArticle = realm.where(Article.class).equalTo(Article.LINK, articleLink).findAll().first();
+                    mArticle = realm.copyFromRealm(realm.where(Article.class)
+                            .equalTo(Article.LINK, articleLink).findAll().first());
                     mArticleDate = mArticle.getDate();
                     mArticleTitle = mArticle.getTitle();
                     mArticleLink = mArticle.getLink();
-                    mArticleParts.addAll(realm.where(ArticlePart.class)
-                            .equalTo(ArticlePart.ARTICLE_LINK, articleLink).findAll());
-                    mArticleCache = realm.copyFromRealm(mArticle);
-                    mArticlePartsCache = realm.copyFromRealm(mArticleParts);
+                    mArticleParts.addAll(realm.copyFromRealm(realm.where(ArticlePart.class)
+                            .equalTo(ArticlePart.ARTICLE_LINK, articleLink).findAll()));
                     mSaved = true;
                 }
             }

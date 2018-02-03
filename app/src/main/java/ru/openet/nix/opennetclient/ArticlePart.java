@@ -1,7 +1,5 @@
 package ru.openet.nix.opennetclient;
 
-import android.support.annotation.Nullable;
-
 import io.realm.RealmObject;
 import io.realm.annotations.Required;
 
@@ -12,9 +10,7 @@ import io.realm.annotations.Required;
 public class ArticlePart extends RealmObject{
     @Required
     private String mArticleLink;
-    @Required
     private String mText;
-    //private String mCode;
     private String mContentLink;
     private int mType;
 
@@ -62,14 +58,6 @@ public class ArticlePart extends RealmObject{
     public void setText(String text) {
         mText = text;
     }
-
-    /*public String getCode() {
-        return mCode;
-    }*/
-
-    /*public void setCode(String code) {
-        mCode = code;
-    }*/
 
     public int getType() {
         return mType;

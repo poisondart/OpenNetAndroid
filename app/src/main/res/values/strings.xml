@@ -51,6 +51,7 @@
     <string name="to_favs_button_hint">Сохранить</string>
     <string name="added_to_favs">Добавлено в избранные статьи</string>
     <string name="deleted_from_favs">Удалено из избранных статей</string>
+    <string name="share_link_hint">Поделиться статьёй</string>
     <!-- AlertDialog -->
     <string name="proof_des">Удалить статью?</string>
     <string name="cancel">ОТМЕНА</string>

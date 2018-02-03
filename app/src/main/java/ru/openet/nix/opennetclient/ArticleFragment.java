@@ -1,5 +1,6 @@
 package ru.openet.nix.opennetclient;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -139,7 +140,12 @@ public class ArticleFragment extends Fragment {
         menu.getItem(1).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Toast.makeText(getContext(), R.string.share_button_hint, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), R.string.share_button_hint, Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_TEXT, mArticleLink);
+                i.putExtra(Intent.EXTRA_SUBJECT, mArticleTitle);
+                startActivity(Intent.createChooser(i, getString(R.string.share_link_hint)));
                 return true;
             }
         });

@@ -77,7 +77,7 @@ public class SavedArticlesFragment extends Fragment {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
                 if(direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.RIGHT){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setMessage(R.string.proof_des);
                     builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
@@ -122,7 +122,23 @@ public class SavedArticlesFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.delete_all_favs:
-                deleteAllArticles();
+                if(mRealm.isEmpty()){
+                    Toast.makeText(getContext(), R.string.all_articles_already_deleted, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                final AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setMessage(R.string.proof_des_all);
+                dialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        deleteAllArticles();
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
         }
         return super.onOptionsItemSelected(item);
     }

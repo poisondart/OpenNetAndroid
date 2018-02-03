@@ -46,7 +46,7 @@
     <!-- Hints-->
     <string name="delete_all_hint">Удалить всё</string>
     <string name="toast_all_deteted">Все статьи удалены</string>
-    <string name="all_articles_already_deleted">Здесь и так ничего нет</string>
+    <string name="all_articles_already_deleted">Эта кнопка удаляет все статьи. Сохранённых статей пока нет.</string>
     <string name="share_button_hint">Поделиться</string>
     <string name="to_favs_button_hint">Сохранить</string>
     <string name="added_to_favs">Добавлено в избранные статьи</string>
@@ -54,6 +54,7 @@
     <string name="share_link_hint">Поделиться статьёй</string>
     <!-- AlertDialog -->
     <string name="proof_des">Удалить статью?</string>
+    <string name="proof_des_all">Удалить все статьи?</string>
     <string name="cancel">ОТМЕНА</string>
     <string name="yes">УДАЛИТЬ</string>
     <!-- -->

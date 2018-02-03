@@ -1,14 +1,18 @@
 package ru.openet.nix.opennetclient;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,7 +48,7 @@ public class SavedArticlesFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.favs_fragment_layout, container, false);
         mToolbar = v.findViewById(R.id.toolbar_favs);
         mRecyclerView = v.findViewById(R.id.saved_recyclerview);
@@ -62,6 +66,49 @@ public class SavedArticlesFragment extends Fragment {
         mArticles = getArticles();
         mAdapter = new SavedArticleAdapter(mArticles);
         mRecyclerView.setAdapter(mAdapter);
+
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+                if(direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.RIGHT){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(R.string.proof_des);
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            mAdapter.notifyItemRemoved(position);
+                            mRealm.executeTransaction(new Realm.Transaction() {
+                                @ParametersAreNonnullByDefault
+                                @Override
+                                public void execute(Realm realm) {
+                                    mAdapter.notifyItemRemoved(position);
+                                    String artlink = mArticles.get(position).getLink();
+                                    realm.where(Article.class).equalTo(Article.LINK,
+                                            artlink).findAll().deleteAllFromRealm();
+                                    realm.where(ArticlePart.class).equalTo(ArticlePart.ARTICLE_LINK, artlink)
+                                            .findAll().deleteAllFromRealm();
+                                }
+                            });
+                        }
+                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            mAdapter.notifyItemRemoved(position + 1);
+                            mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
+                        }
+                    }).show();
+                }
+
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
         return v;
     }
 

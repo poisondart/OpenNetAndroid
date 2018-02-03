@@ -26,7 +26,10 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppThemeArticle">
         </activity>
-        <activity android:name=".SettingsHolderActivity">
+        <activity android:name=".SettingsHolderActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize"
+                  android:parentActivityName=".MainActivity"
+                  android:theme="@style/AppThemeSettings">
         </activity>
     </application>
 

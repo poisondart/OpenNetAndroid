@@ -14,7 +14,7 @@ public class SettingsHolderActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolbar_settings);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(R.string.preferences);
-        getSupportFragmentManager().beginTransaction()
+        getFragmentManager().beginTransaction()
                 .add(R.id.settings_fragment_holder, new SettingsFragment()).commit();
     }
 }

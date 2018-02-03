@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.support.v14.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
@@ -18,13 +19,14 @@ import java.io.InputStreamReader;
  * Created by Nix on 01.02.2018.
  */
 
-public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener{
+public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener,
+        Preference.OnPreferenceChangeListener{
     private Preference mAboutPreference, mLicencePreference, mDevPreference;
     private CheckBoxPreference mBrowserPreference, mThemePreference;
     private String mMessage;
 
     public static final String KEY_BROWSER_TYPE = "b_key";
-    public static final String KEY_THEME_TYPE = "t_key";
+    public static final String KEY_THEME_TYPE = "b_key";
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -47,13 +49,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         mAboutPreference.setOnPreferenceClickListener(this);
         mLicencePreference.setOnPreferenceClickListener(this);
         mDevPreference.setOnPreferenceClickListener(this);
+        mBrowserPreference.setOnPreferenceChangeListener(this);
+        mThemePreference.setOnPreferenceChangeListener(this);
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
         switch (preference.getKey()){
             case "a_key":
-                Toast.makeText(getContext(), R.string.app_vesion, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.app_vesion, Toast.LENGTH_LONG).show();
                 break;
             case "dev_key":
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
@@ -70,9 +74,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         return true;
     }
 
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        switch (preference.getKey()){
+            case "b_key":
+
+                break;
+            case "t_key":
+
+                break;
+        }
+        return true;
+    }
+
     private void initLicenseMessage(){
         try{
-            AssetManager assetManager = getContext().getAssets();
+            AssetManager assetManager = getActivity().getAssets();
             InputStream inputStream = assetManager.open("licence.txt");
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -94,7 +111,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         }
     }
     private void showLicenses(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.licence)
                 .setMessage(mMessage)
                 .setCancelable(false)

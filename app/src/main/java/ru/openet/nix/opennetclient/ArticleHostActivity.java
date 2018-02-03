@@ -6,14 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
 
 public class ArticleHostActivity extends AppCompatActivity {
-
-    static {
-        AppCompatDelegate.setDefaultNightMode(
-                AppCompatDelegate.MODE_NIGHT_YES);
-    }
 
     private static final String EXTRA_TITLE = "ru.opennet.nix.opennetclient.title";
     private static final String EXTRA_LINK = "ru.opennet.nix.opennetclient.link";
@@ -36,7 +30,6 @@ public class ArticleHostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article_base);
-
         mArticleTitle = getIntent().getStringExtra(EXTRA_TITLE);
         mArticleDate = getIntent().getStringExtra(EXTRA_DATE);
         mArticleLink = getIntent().getStringExtra(EXTRA_LINK);

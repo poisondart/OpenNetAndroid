@@ -8,7 +8,6 @@ import android.support.v14.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,7 +25,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     private String mMessage;
 
     public static final String KEY_BROWSER_TYPE = "b_key";
-    public static final String KEY_THEME_TYPE = "b_key";
+    public static final String KEY_THEME_TYPE = "t_key";
 
     public SettingsFragment() {
         // Required empty public constructor

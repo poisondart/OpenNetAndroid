@@ -40,15 +40,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/article_recyclerview"
             android:layout_below="@+id/progressbar_article"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/show_comments_button"
-            android:background="@color/colorBackground"
-            android:text="@string/show_comments_button"
-            android:textColor="@color/colorPrimary"
-            android:layout_below="@id/article_recyclerview"
-            android:layout_marginTop="6dp"/>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

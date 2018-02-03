@@ -3,6 +3,7 @@ package ru.openet.nix.opennetclient;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v14.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
@@ -18,8 +19,7 @@ import java.io.InputStreamReader;
  * Created by Nix on 01.02.2018.
  */
 
-public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener,
-        Preference.OnPreferenceChangeListener{
+public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener{
     private Preference mAboutPreference, mLicencePreference, mDevPreference;
     private CheckBoxPreference mBrowserPreference, mThemePreference;
     private String mMessage;
@@ -48,8 +48,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         mAboutPreference.setOnPreferenceClickListener(this);
         mLicencePreference.setOnPreferenceClickListener(this);
         mDevPreference.setOnPreferenceClickListener(this);
-        mBrowserPreference.setOnPreferenceChangeListener(this);
-        mThemePreference.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -60,27 +58,15 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 break;
             case "dev_key":
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-                intent.putExtra(Intent.EXTRA_TEXT, "I'm email body.");
-                startActivity(Intent.createChooser(intent, "Send Email"));
+                intent.setData(Uri.parse("mailto:carpuninnandroid@yandex.ru"));
+                try {
+                    startActivity(Intent.createChooser(intent, getString(R.string.go_dev)));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(getActivity(), getString(R.string.no_email_clients), Toast.LENGTH_SHORT).show();
+                }
                 break;
             case "l_key":
                 showLicenses();
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        switch (preference.getKey()){
-            case "b_key":
-
-                break;
-            case "t_key":
-
                 break;
         }
         return true;

@@ -76,4 +76,5 @@
     <string name="go_dev">Связаться с разработчиком</string>
     <string name="go_dev_key">dev_key</string>
     <string name="dev_email">carpuninnandroid@yandex.ru</string>
+    <string name="no_email_clients">У Вас не установлено никаких почтовых клиентов</string>
 </resources>

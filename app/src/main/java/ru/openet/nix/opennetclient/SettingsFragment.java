@@ -21,7 +21,6 @@ import java.io.InputStreamReader;
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener{
     private Preference mAboutPreference, mLicencePreference, mDevPreference;
-    private CheckBoxPreference mBrowserPreference, mThemePreference;
     private String mMessage;
 
     public static final String KEY_BROWSER_TYPE = "b_key";
@@ -40,8 +39,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.app_settings, rootKey);
-        mBrowserPreference = (CheckBoxPreference) getPreferenceManager().findPreference(getString(R.string.browser_key));
-        mThemePreference = (CheckBoxPreference) getPreferenceManager().findPreference(getString(R.string.theme_key));
         mAboutPreference = getPreferenceManager().findPreference(getString(R.string.app_key));
         mLicencePreference = getPreferenceManager().findPreference(getString(R.string.licence_key));
         mDevPreference = getPreferenceManager().findPreference(getString(R.string.go_dev_key));

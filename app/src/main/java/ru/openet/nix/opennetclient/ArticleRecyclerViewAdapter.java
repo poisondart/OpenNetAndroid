@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -49,32 +48,26 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
         if(viewType == TYPE_HEADER){
-            //Inflating header view
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_header, parent, false);
             return new HeaderViewHolder(itemView);
         }else if(viewType == TYPE_ITEM_TEXT){
-            //Inflating text view
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_part_text, parent,false);
             return new TextPartViewHolder(itemView);
         }else if(viewType == TYPE_ITEM_CODE){
-            //Inflating code view
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_part_code, parent,false);
             return new CodePartViewHolder(itemView);
         }else if(viewType == TYPE_ITEM_IMAGE){
-            //Inflating image view
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_part_image, parent,false);
             return new ImagePartViewHolder(itemView);
         }else if(viewType == TYPE_ITEM_LIST){
-            //Inflating image view
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_part_list, parent,false);
             return new ListPartViewHolder(itemView);
         }else if(viewType == TYPE_ITEM_EXTRA_LINK){
-            //Inflating image view
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_part_extra_links, parent,false);
             return new ExtraLinkPartViewHolder(itemView);
@@ -146,14 +139,6 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             headerTitle = view.findViewById(R.id.article_title);
         }
     }
-    /*private class FooterViewHolder extends RecyclerView.ViewHolder {
-        TextView footerTitle;
-
-        private FooterViewHolder(View view) {
-            super(view);
-            footerTitle = view.findViewById(R.id.topic_links);
-        }
-    }*/
     private class TextPartViewHolder extends RecyclerView.ViewHolder{
         TextView textView;
         private TextPartViewHolder(View view){
@@ -205,10 +190,9 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(View view) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
             boolean isbrowser = preferences.getBoolean(SettingsFragment.KEY_BROWSER_TYPE, true);
             Fragment fragment;
-            FragmentManager fragmentManager = ((AppCompatActivity) mContext).getSupportFragmentManager();
             if(pos == mFirstExtraLinkPosition){
                 if(!isbrowser){
                     Intent i = new Intent(Intent.ACTION_VIEW);
@@ -220,6 +204,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             }else {
                 fragment = ArticleFragment.newInstance(null, part.getText(), part.getContentLink());
             }
+            FragmentManager fragmentManager = ((AppCompatActivity) mContext).getSupportFragmentManager();
             fragmentManager.beginTransaction().add(R.id.article_fragment_host, fragment).addToBackStack(null).commit();
         }
     }

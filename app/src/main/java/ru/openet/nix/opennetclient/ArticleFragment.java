@@ -80,7 +80,6 @@ public class ArticleFragment extends Fragment {
         mToolbar = v.findViewById(R.id.toolbar_article);
         mProgressBar = v.findViewById(R.id.progressbar_article);
         mArticleParts = new ArrayList<>();
-        //mArticlePartsCache = new ArrayList<>();
         mProgressBar.setMax(100);
         setHasOptionsMenu(true);
         mLinearLayoutManager = new LinearLayoutManager(getContext());

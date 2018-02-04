@@ -31,15 +31,12 @@ public class ArticlePart extends RealmObject{
         mArticleLink = link;
         if(type == SIMPLE_TEXT || type == CODE){
             mText = text;
-            //mCode = null;
             mContentLink = null;
         }else if(type == IMAGE){
             mContentLink = text;
-            //mCode = null;
             mText = null;
         }else if(type == LIST_ITEM){
             mText = text;
-            //mCode = null;
             mContentLink = null;
         }
     }

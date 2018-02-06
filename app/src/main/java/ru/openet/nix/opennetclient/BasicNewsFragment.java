@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,7 +40,6 @@ import java.util.Locale;
 public class BasicNewsFragment extends Fragment {
 
     private Toolbar mToolbar;
-    private DrawerLayout mDrawerLayout;
     private ArrayList<NewsItem> mNewsItems;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -77,11 +74,6 @@ public class BasicNewsFragment extends Fragment {
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         actionBar.setSupportActionBar(mToolbar);
         actionBar.getSupportActionBar().setDisplayShowTitleEnabled(false);
-        mDrawerLayout = actionBar.findViewById(R.id.drawerlayout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, mToolbar, R.string.app_name,
-                R.string.app_name);
-        mDrawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
         new FetchFeedTask(this, mLink).execute();
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -107,30 +99,38 @@ public class BasicNewsFragment extends Fragment {
                         mLink = Links.MAIN_NEWS_RSS_LINK;
                         break;
                     case 1:
+                        new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_NEWS_RSS_REVIEW).execute();
+                        mLink = Links.MAIN_NEWS_RSS_REVIEW;
+                        break;
+                    case 2:
+                        new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_NEWS_RSS_ARTS).execute();
+                        mLink = Links.MAIN_NEWS_RSS_ARTS;
+                        break;
+                    case 3:
                         new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_SECURITY_PROB_RSS_LINK).execute();
                         mLink = Links.MAIN_SECURITY_PROB_RSS_LINK;
                         break;
-                    case 2:
+                    case 4:
                         new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_NEW_SOFT_PROB_RSS_LINK).execute();
                         mLink = Links.MAIN_NEW_SOFT_PROB_RSS_LINK;
                         break;
-                    case 3:
+                    case 5:
                         new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_LINUX_RSS_LINK).execute();
                         mLink = Links.MAIN_LINUX_RSS_LINK;
                         break;
-                    case 4:
+                    case 6:
                         new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_BSD_RSS_LINK).execute();
                         mLink = Links.MAIN_BSD_RSS_LINK;
                         break;
-                    case 5:
+                    case 7:
                         new FetchFeedTask(BasicNewsFragment.this, Links.UBUNTU_NEWS_RSS_LINK).execute();
                         mLink = Links.UBUNTU_NEWS_RSS_LINK;
                         break;
-                    case 6:
+                    case 8:
                         new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_FEDORA_RSS_LINK).execute();
                         mLink = Links.MAIN_FEDORA_RSS_LINK;
                         break;
-                    case 7:
+                    case 9:
                         new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_MOZILLA_FIREFOX_RSS_LINK).execute();
                         mLink = Links.MAIN_MOZILLA_FIREFOX_RSS_LINK;
                         break;

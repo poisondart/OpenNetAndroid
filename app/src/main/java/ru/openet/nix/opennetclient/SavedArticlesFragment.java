@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,7 +28,6 @@ import io.realm.RealmResults;
 
 public class SavedArticlesFragment extends Fragment {
     private Toolbar mToolbar;
-    private DrawerLayout mDrawerLayout;
     private RealmResults<Article> mArticles;
     private RecyclerView mRecyclerView;
     private SavedArticleAdapter mAdapter;
@@ -58,11 +55,6 @@ public class SavedArticlesFragment extends Fragment {
         mToolbar.setTitle(getString(R.string.favs));
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         actionBar.setSupportActionBar(mToolbar);
-        mDrawerLayout = actionBar.findViewById(R.id.drawerlayout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, mToolbar, R.string.app_name,
-                R.string.app_name);
-        mDrawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
         mArticles = getArticles();
         mAdapter = new SavedArticleAdapter(mArticles);
         mRecyclerView.setAdapter(mAdapter);

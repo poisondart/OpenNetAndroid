@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group
-        android:checkableBehavior="single">
     <item
         android:id="@+id/main_item"
         android:title="@string/main_news"
@@ -17,9 +15,6 @@
             android:title="@string/articles"
             android:icon="@drawable/ic_articles"
             android:checkable="true"/>
-    </group>
-    <group android:id="@+id/last"
-           android:checkableBehavior="single">
         <item
             android:id="@+id/favs_item"
             android:title="@string/favs"
@@ -30,5 +25,4 @@
             android:title="@string/preferences"
             android:checkable="false"
             android:icon="@drawable/ic_preferences"/>
-    </group>
 </menu>

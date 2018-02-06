@@ -7,8 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v14.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
  * Created by Nix on 01.02.2018.
  */
 
-public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener{
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener{
     private Preference mAboutPreference, mLicencePreference, mDevPreference;
     private String mMessage;
 

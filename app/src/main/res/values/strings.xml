@@ -3,12 +3,14 @@
     <!-- NavigationView Menu Items-->
     <string name="main_news">Новости</string>
     <string name="forum">Форум</string>
-    <string name="articles">Статьи</string>
+    <string name="articles">Объявления</string>
     <string name="favs">Избранное</string>
     <string name="preferences">Настройки</string>
 
 <string-array name="spinner_topics">
         <item>Главное</item>
+        <item>События</item>
+        <item>Обзоры статей</item>
         <item>Проблемы безопасности</item>
         <item>Новые версии ПО</item>
         <item>Linux</item>

@@ -6,6 +6,8 @@ package ru.openet.nix.opennetclient;
 
 class Links {
     final static String MAIN_NEWS_RSS_LINK = "http://www.opennet.ru/opennews/opennews_all_noadv.rss";
+    final static String MAIN_NEWS_RSS_REVIEW = "http://www.opennet.ru/opennews/opennews_review.rss";
+    final static String MAIN_NEWS_RSS_ARTS = "http://www.opennet.ru/opennews/opennews_arts.rss";
     final static String MAIN_SECURITY_PROB_RSS_LINK = "http://www.opennet.ru/opennews/opennews_sec.rss";
     final static String MAIN_NEW_SOFT_PROB_RSS_LINK = "http://www.opennet.ru/opennews/opennews_prog.rss";
     final static String MAIN_LINUX_RSS_LINK = "http://www.opennet.ru/opennews/opennews_linux.rss";

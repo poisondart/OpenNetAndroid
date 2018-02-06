@@ -2,6 +2,7 @@ package ru.openet.nix.opennetclient;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +18,9 @@ import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
@@ -45,24 +49,23 @@ public class BasicNewsFragment extends Fragment {
     private NewsItemAdapter mAdapter;
     private DividerItemDecoration mDividerItemDecoration;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private Spinner mSpinner;
 
     private String mLink;
-    private String mTitle;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = this.getArguments();
-        mLink = bundle.getString(MainActivity.LINK_TAG);
-        mTitle = bundle.getString(MainActivity.TITLE_TAG);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.main_news_fragment, container, false);
         mNewsItems = new ArrayList<>();
         mToolbar = v.findViewById(R.id.toolbar);
+        mSpinner = v.findViewById(R.id.spinner_nav);
+        iniSpinner();
         mRecyclerView = v.findViewById(R.id.recyclerview);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mDividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), mLinearLayoutManager.getOrientation());
@@ -71,9 +74,9 @@ public class BasicNewsFragment extends Fragment {
         mAdapter = new NewsItemAdapter(mNewsItems);
         mRecyclerView.setAdapter(mAdapter);
         mSwipeRefreshLayout = v.findViewById(R.id.swipetorefresh);
-        mToolbar.setTitle(mTitle);
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         actionBar.setSupportActionBar(mToolbar);
+        actionBar.getSupportActionBar().setDisplayShowTitleEnabled(false);
         mDrawerLayout = actionBar.findViewById(R.id.drawerlayout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, mToolbar, R.string.app_name,
                 R.string.app_name);
@@ -89,6 +92,57 @@ public class BasicNewsFragment extends Fragment {
         return v;
     }
 
+
+    private void iniSpinner(){
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.spinner_topics, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown);
+        mSpinner.setAdapter(adapter);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i){
+                    case 0:
+                        new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_NEWS_RSS_LINK).execute();
+                        mLink = Links.MAIN_NEWS_RSS_LINK;
+                        break;
+                    case 1:
+                        new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_SECURITY_PROB_RSS_LINK).execute();
+                        mLink = Links.MAIN_SECURITY_PROB_RSS_LINK;
+                        break;
+                    case 2:
+                        new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_NEW_SOFT_PROB_RSS_LINK).execute();
+                        mLink = Links.MAIN_NEW_SOFT_PROB_RSS_LINK;
+                        break;
+                    case 3:
+                        new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_LINUX_RSS_LINK).execute();
+                        mLink = Links.MAIN_LINUX_RSS_LINK;
+                        break;
+                    case 4:
+                        new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_BSD_RSS_LINK).execute();
+                        mLink = Links.MAIN_BSD_RSS_LINK;
+                        break;
+                    case 5:
+                        new FetchFeedTask(BasicNewsFragment.this, Links.UBUNTU_NEWS_RSS_LINK).execute();
+                        mLink = Links.UBUNTU_NEWS_RSS_LINK;
+                        break;
+                    case 6:
+                        new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_FEDORA_RSS_LINK).execute();
+                        mLink = Links.MAIN_FEDORA_RSS_LINK;
+                        break;
+                    case 7:
+                        new FetchFeedTask(BasicNewsFragment.this, Links.MAIN_MOZILLA_FIREFOX_RSS_LINK).execute();
+                        mLink = Links.MAIN_MOZILLA_FIREFOX_RSS_LINK;
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //
+            }
+        });
+    }
 
     private static class FetchFeedTask extends AsyncTask<Integer, Void, Integer>{
         private WeakReference<BasicNewsFragment> fragmentRef;

@@ -22,6 +22,6 @@
         android:layout_width="300dp"
         android:layout_gravity="start"
         app:headerLayout="@layout/header_layout"
-        app:menu="@menu/nav_menu">
+        app:menu="@menu/new_nav_menu">
     </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

@@ -1,18 +1,23 @@
 <resources>
     <string name="app_name">OpenNetClient</string>
     <!-- NavigationView Menu Items-->
-    <string name="main_news">Главные новости</string>
+    <string name="main_news">Новости</string>
     <string name="forum">Форум</string>
-    <string name="topics">Тематика</string>
-    <string name="safety">Проблемы безопасности</string>
-    <string name="updates">Новые версии ПО</string>
-    <string name="linux">Linux</string>
-    <string name="BSD">BSD</string>
-    <string name="Ubuntu">Ubuntu</string>
-    <string name="Fedora">Fedora</string>
-    <string name="mozilla">Mozilla/Firefox</string>
+    <string name="articles">Статьи</string>
     <string name="favs">Избранное</string>
     <string name="preferences">Настройки</string>
+
+<string-array name="spinner_topics">
+        <item>Главное</item>
+        <item>Проблемы безопасности</item>
+        <item>Новые версии ПО</item>
+        <item>Linux</item>
+        <item>BSD</item>
+        <item>Ubuntu</item>
+        <item>Fedora</item>
+        <item>Mozilla/Firefox</item>
+    </string-array>
+
     <!-- Placeholders-->
     <string name="dateview">7 января 2018 г., 6:41</string>
     <string name="titleview">Проект Elementary OS разрабатывает текстовый редактор для разработчиков</string>

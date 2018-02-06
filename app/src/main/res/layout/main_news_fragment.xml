@@ -14,7 +14,14 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         app:layout_scrollFlags="scroll|enterAlways"
-        android:id="@+id/toolbar"/>
+        android:id="@+id/toolbar">
+        <Spinner
+            android:id="@+id/spinner_nav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:layout_marginEnd="25dp"/>
+    </android.support.v7.widget.Toolbar>
 </android.support.design.widget.AppBarLayout>
             <android.support.v4.widget.SwipeRefreshLayout
                 android:layout_width="match_parent"

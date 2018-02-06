@@ -34,3 +34,6 @@
 -keep @io.realm.internal.Keep class *
 -dontwarn javax.**
 -dontwarn io.realm.**
+
+# for DexGuard only
+-keepresourcexmlelements manifest/application/meta-data@value=GlideModule

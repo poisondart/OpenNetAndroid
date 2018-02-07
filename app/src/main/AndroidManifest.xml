@@ -13,8 +13,7 @@
         android:theme="@style/AppTheme"
         android:name=".OpenNetApp">
         <activity
-            android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -23,12 +22,10 @@
         </activity>
         <activity
             android:name=".ArticleHostActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppThemeArticle">
         </activity>
         <activity android:name=".SettingsHolderActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize"
                   android:parentActivityName=".MainActivity"
                   android:theme="@style/AppThemeSettings">
         </activity>

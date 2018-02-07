@@ -2,6 +2,8 @@ package ru.openet.nix.opennetclient;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -45,9 +47,9 @@ public class BasicNewsFragment extends Fragment {
     private NewsItemAdapter mAdapter;
     private DividerItemDecoration mDividerItemDecoration;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private String mLink;
     private String mTitle;
+    private Parcelable mListState;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,11 +57,15 @@ public class BasicNewsFragment extends Fragment {
         Bundle bundle = this.getArguments();
         mLink = bundle.getString(MainActivity.LINK_TAG);
         mTitle = bundle.getString(MainActivity.TITLE_TAG);
+        if(savedInstanceState != null){
+            mListState = savedInstanceState.getParcelable("ListState");
+        }
+        setRetainInstance(true);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.main_news_fragment, container, false);
         mNewsItems = new ArrayList<>();
         mToolbar = v.findViewById(R.id.toolbar);
@@ -79,7 +85,15 @@ public class BasicNewsFragment extends Fragment {
                 R.string.app_name);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        new FetchFeedTask(this, mLink).execute();
+
+        if(savedInstanceState == null || !savedInstanceState.containsKey("key")){
+            new FetchFeedTask(this, mLink).execute();
+        }else{
+            mNewsItems = savedInstanceState.getParcelableArrayList("key");
+            mAdapter = new NewsItemAdapter(mNewsItems);
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+        }
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -89,6 +103,12 @@ public class BasicNewsFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList("key", mNewsItems);
+        outState.putParcelable("ListState", mRecyclerView.getLayoutManager().onSaveInstanceState());
+        super.onSaveInstanceState(outState);
+    }
 
     private static class FetchFeedTask extends AsyncTask<Integer, Void, Integer>{
         private WeakReference<BasicNewsFragment> fragmentRef;

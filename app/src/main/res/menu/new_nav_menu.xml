@@ -6,12 +6,7 @@
         android:icon="@drawable/ic_news"
         android:checkable="true"/>
         <item
-            android:id="@+id/forum_item"
-            android:title="@string/forum"
-            android:icon="@drawable/ic_forum"
-            android:checkable="true"/>
-        <item
-            android:id="@+id/articles_item"
+            android:id="@+id/board_item"
             android:title="@string/articles"
             android:icon="@drawable/ic_articles"
             android:checkable="true"/>

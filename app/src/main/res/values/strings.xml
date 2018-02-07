@@ -2,10 +2,10 @@
     <string name="app_name">OpenNetClient</string>
     <!-- NavigationView Menu Items-->
     <string name="main_news">Новости</string>
-    <string name="forum">Форум</string>
     <string name="articles">Объявления</string>
     <string name="favs">Избранное</string>
     <string name="preferences">Настройки</string>
+    <string name="board_title">Доска объявлений</string>
 
 <string-array name="spinner_topics">
         <item>Главное</item>

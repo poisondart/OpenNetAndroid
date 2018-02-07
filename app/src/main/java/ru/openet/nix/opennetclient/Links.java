@@ -15,4 +15,5 @@ class Links {
     final static String UBUNTU_NEWS_RSS_LINK = "http://www.opennet.ru/opennews/opennews_ubuntu_full.rss";
     final static String MAIN_FEDORA_RSS_LINK = "http://www.opennet.ru/opennews/opennews_fedora_full.rss";
     final static String MAIN_MOZILLA_FIREFOX_RSS_LINK = "http://www.opennet.ru/opennews/opennews_mozilla_full.rss";
+    final static String MAIN_BOARD_RSS_LINK = "http://www.opennet.ru/openforum/forum_vsluhforumID2.rss";
 }

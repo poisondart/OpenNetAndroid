@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.main_item:
                         loadNewsFragment();
                         break;
+                    case R.id.board_item:
+                        loadBoardFragment();
+                        break;
                     case R.id.favs_item:
                         loadFavsFragment();
                         break;
@@ -57,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
     private void loadSettingsFragment(){
         mFragmentManager.beginTransaction().remove(mFragment).commit();
         mFragment = new SettingsFragment();
+        mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
+    }
+    private void loadBoardFragment(){
+        mFragmentManager.beginTransaction().remove(mFragment).commit();
+        mFragment = new BoardFragment();
         mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
     }
 }

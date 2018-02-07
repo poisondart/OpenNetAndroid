@@ -9,15 +9,20 @@ public class NewsItem {
     private String mTitle;
     private String mDescr;
     private String mLink;
+    private int mType;
+
+    public static final int NEWS = 0;
+    public static final int BOARD = 1;
 
     public NewsItem() {
     }
 
-    public NewsItem(String date, String title, String descr, String link) {
+    public NewsItem(String date, String title, String descr, String link, int type) {
         mDate = date;
         mTitle = title;
         mDescr = descr;
         mLink = link;
+        mType = type;
     }
 
     public String getDate() {
@@ -50,5 +55,13 @@ public class NewsItem {
 
     public void setLink(String link) {
         mLink = link;
+    }
+
+    public int getType() {
+        return mType;
+    }
+
+    public void setType(int type) {
+        mType = type;
     }
 }

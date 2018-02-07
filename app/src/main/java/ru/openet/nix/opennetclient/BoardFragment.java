@@ -194,7 +194,7 @@ public class BoardFragment extends Fragment {
 
                 if (title != null && pubDate != null && descr != null && link != null) {
                     if (isItem) {
-                        NewsItem item = new NewsItem(pubDate, title, descr, link);
+                        NewsItem item = new NewsItem(pubDate, title, descr, link, NewsItem.BOARD);
                         items.add(item);
                     }
 

@@ -63,11 +63,13 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
         }
         @Override
         public void onClick(View view) {
-            Intent intent = ArticleHostActivity.newInstance(view.getContext(),
-                    mItem.getTitle(),
-                    mItem.getLink(),
-                    mItem.getDate());
-            view.getContext().startActivity(intent);
+            if (mItem.getType() == NewsItem.NEWS){
+                Intent intent = ArticleHostActivity.newInstance(view.getContext(),
+                        mItem.getTitle(),
+                        mItem.getLink(),
+                        mItem.getDate());
+                view.getContext().startActivity(intent);
+            }
         }
     }
 }

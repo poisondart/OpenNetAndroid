@@ -1,5 +1,8 @@
 package ru.openet.nix.opennetclient;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -14,11 +17,15 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
@@ -50,6 +57,25 @@ public class BasicNewsFragment extends Fragment {
     private String mLink;
     private String mTitle;
     private Parcelable mListState;
+    private Callbacks mCallbacks;
+    /**
+     * Обязательный интерфейс для активности-хоста.
+     */
+    public interface Callbacks {
+        void onItemSelected(NewsItem item);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,7 +175,9 @@ public class BasicNewsFragment extends Fragment {
             BasicNewsFragment fragment = fragmentRef.get();
             if (fragment == null) return;
             fragment.mSwipeRefreshLayout.setRefreshing(false);
-            fragment.mRecyclerView.setAdapter(new NewsItemAdapter(fragment.mNewsItems));
+            //fragment.mRecyclerView.setAdapter(new NewsItemAdapter(fragment.mNewsItems));
+            fragment.mAdapter.setItems(fragment.mNewsItems);
+            fragment.mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -246,4 +274,62 @@ public class BasicNewsFragment extends Fragment {
             inputStream.close();
         }
     }
+
+
+    public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsItemViewHolder> {
+
+        private ArrayList<NewsItem> mNewsItems;
+
+        NewsItemAdapter(ArrayList<NewsItem> items) {
+            mNewsItems = items;
+        }
+        public void setItems(ArrayList<NewsItem> items){
+            mNewsItems = items;
+        }
+        @Override
+        public NewsItemAdapter.NewsItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item_card, parent,false);
+            return new NewsItemAdapter.NewsItemViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(final NewsItemViewHolder holder, int position) {
+            NewsItem item = mNewsItems.get(position);
+            holder.bindItem(item);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mNewsItems.size();
+        }
+
+        class NewsItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            private TextView mDateView, mTitleView, mDescrView;
+            private NewsItem mItem;
+            boolean mBoolean;
+            NewsItemViewHolder(View itemView) {
+                super(itemView);
+                itemView.setOnClickListener(this);
+                mDateView = itemView.findViewById(R.id.date_view);
+                mTitleView = itemView.findViewById(R.id.title_view);
+                mDescrView = itemView.findViewById(R.id.descr_view);
+                mDescrView.setMovementMethod(ClickableMovementMethod.getInstance());
+                mDescrView.setClickable(false);
+                mDescrView.setLongClickable(false);
+            }
+
+            public void bindItem(NewsItem item){
+                mItem = item;
+                Spanned spanned = Html.fromHtml(mItem.getDescr().replaceAll("<img.+?>", ""));
+                mTitleView.setText(mItem.getTitle());
+                mDescrView.setText(spanned);
+                mDateView.setText(mItem.getDate());
+            }
+            @Override
+            public void onClick(View view) {
+                mCallbacks.onItemSelected(mItem);
+            }
+        }
+    }
+
 }

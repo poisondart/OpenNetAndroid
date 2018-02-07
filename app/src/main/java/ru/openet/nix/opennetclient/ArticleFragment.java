@@ -89,10 +89,10 @@ public class ArticleFragment extends Fragment {
         mArticle = new Article(mArticleDate, mArticleTitle, mArticleLink);
         mActionBar = (AppCompatActivity) getActivity();
         mActionBar.setSupportActionBar(mToolbar);
-        if(mActionBar.getSupportActionBar() != null){
+        /*if(mActionBar.getSupportActionBar() != null){
             mActionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mActionBar.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mActionBar.getSupportActionBar().setDisplayShowHomeEnabled(true);*/
         if(mArticleDate != null){
             mActionBar.setTitle(mArticleDate);
         }else {

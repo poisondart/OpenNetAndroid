@@ -5,5 +5,5 @@
     android:id="@+id/delete_all_favs"
     android:icon="@drawable/ic_favs_delete"
     android:title="@string/delete_all_hint"
-    app:showAsAction="ifRoom|withText"/>
+    app:showAsAction="ifRoom"/>
 </menu>

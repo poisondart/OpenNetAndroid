@@ -12,10 +12,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BasicNewsFragment.Callbacks{
 
     private DrawerLayout mDrawerLayout;
-    private FragmentManager mFragmentManager;
+    //private FragmentManager mFragmentManager;
     private Fragment mFragment;
 
     public static final String TITLE_TAG = "title";
@@ -114,5 +114,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, "name", mFragment);
+    }
+
+    @Override
+    public void onItemSelected(NewsItem item) {
+        if(mIsDualPane){
+            ArticleFragment articleFragment = ArticleFragment.newInstance(item.getDate(),
+                    item.getTitle(), item.getLink());
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.detail_view, articleFragment).commit();
+        }else{
+            Intent intent = ArticleHostActivity.newInstance(MainActivity.this,
+                    item.getTitle(),
+                    item.getLink(),
+                    item.getDate());
+            startActivity(intent);
+        }
     }
 }

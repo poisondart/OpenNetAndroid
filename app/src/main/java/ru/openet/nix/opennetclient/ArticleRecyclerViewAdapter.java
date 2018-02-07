@@ -224,7 +224,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 @Override
                 public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-                    Toast.makeText(mContext, "LOL", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(mContext, "LOL", Toast.LENGTH_LONG).show();
                 }
             };
             mYouTubeThumbnailView.initialize(Links.YOUTUBE_API_KEY, new YouTubeThumbnailView.OnInitializedListener() {
@@ -236,7 +236,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 @Override
                 public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-                    Toast.makeText(mContext, "LOL Init", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(mContext, "LOL Init", Toast.LENGTH_LONG).show();
                 }
             });
         }

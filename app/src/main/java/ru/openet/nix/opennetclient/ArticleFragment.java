@@ -218,6 +218,10 @@ public class ArticleFragment extends Fragment {
                     }else if(e.tagName().equals("pre")){
                         ArticlePart articlePart = new ArticlePart(ArticlePart.CODE, e.text(), mLink);
                         fragment.mArticleParts.add(articlePart);
+                    }else if(e.tagName().equals("iframe")){
+                        ArticlePart articlePart = new ArticlePart(ArticlePart.VIDEO_ITEM, e.attr("src"), mLink);
+                        articlePart.initVideoId();
+                        fragment.mArticleParts.add(articlePart);
                     }else if(e.tagName().equals("img")){
                         ArticlePart articlePart = new ArticlePart(ArticlePart.IMAGE, e.attr("src"), mLink);
                         fragment.mArticleParts.add(articlePart);

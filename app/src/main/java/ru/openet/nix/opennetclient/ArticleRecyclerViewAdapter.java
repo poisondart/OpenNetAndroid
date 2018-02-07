@@ -15,7 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
+import com.google.android.youtube.player.YouTubeThumbnailLoader;
+import com.google.android.youtube.player.YouTubeThumbnailView;
+
 import java.util.ArrayList;
 
 /**
@@ -30,6 +37,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int TYPE_ITEM_IMAGE = 4;
     private static final int TYPE_ITEM_LIST = 5;
     private static final int TYPE_ITEM_EXTRA_LINK = 6;
+    private static final int TYPE_ITEM_VIDEO = 7;
     private int mFirstExtraLinkPosition = -1;
     private Context mContext;
     private ArrayList<ArticlePart> mArticleParts;
@@ -67,6 +75,10 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_part_list, parent,false);
             return new ListPartViewHolder(itemView);
+        }else if(viewType == TYPE_ITEM_VIDEO){
+            itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.article_part_video, parent,false);
+            return new VideoPartViewHolder(itemView);
         }else if(viewType == TYPE_ITEM_EXTRA_LINK){
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.article_part_extra_links, parent,false);
@@ -90,8 +102,12 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             final ListPartViewHolder listPartViewHolder = (ListPartViewHolder) holder;
             Spanned spanned = Html.fromHtml(mArticleParts.get(position - 1).getText().replaceAll("<img.+?>", ""));
             listPartViewHolder.textView.setText(spanned);
+        }else if (holder instanceof VideoPartViewHolder) {
+            final VideoPartViewHolder videoPartViewHolder = (VideoPartViewHolder) holder;
+            videoPartViewHolder.bindTube(mArticleParts.get(position - 1));
         }else if (holder instanceof ExtraLinkPartViewHolder) {
-            ((ExtraLinkPartViewHolder) holder).bindPart(mArticleParts.get(position - 1), position - 1);
+            final ExtraLinkPartViewHolder extraLinkPartViewHolder = (ExtraLinkPartViewHolder) holder;
+            extraLinkPartViewHolder.bindPart(mArticleParts.get(position - 1), position - 1);
         }else if (holder instanceof ImagePartViewHolder) {
             final ImagePartViewHolder imagePartViewHolder = (ImagePartViewHolder) holder;
             GlideApp.with(mContext)
@@ -115,6 +131,8 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 return TYPE_ITEM_IMAGE;
             }else if(mArticleParts.get(position - 1).getType() == ArticlePart.LIST_ITEM){
                 return TYPE_ITEM_LIST;
+            }else if(mArticleParts.get(position - 1).getType() == ArticlePart.VIDEO_ITEM){
+                return TYPE_ITEM_VIDEO;
             }else if(mArticleParts.get(position - 1).getType() == ArticlePart.ETRA_LINKS_ITEM){
                 if(mFirstExtraLinkPosition < 0){
                     mFirstExtraLinkPosition = position - 1;
@@ -171,6 +189,56 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             textView.setMovementMethod(ClickableMovementMethod.getInstance());
             textView.setClickable(false);
             textView.setLongClickable(false);
+        }
+    }
+    private class VideoPartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+       YouTubeThumbnailView mYouTubeThumbnailView;
+       protected RelativeLayout mRelativeLayout;
+       protected ImageView mImageView;
+       ArticlePart mPart;
+
+        public VideoPartViewHolder(View itemView) {
+            super(itemView);
+            mYouTubeThumbnailView = itemView.findViewById(R.id.video_view);
+            mImageView = itemView.findViewById(R.id.btnYoutube_player);
+            mRelativeLayout = itemView.findViewById(R.id.relative_youtube);
+            mImageView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = YouTubeStandalonePlayer.createVideoIntent((AppCompatActivity)view.getContext(),
+                    Links.YOUTUBE_API_KEY, mPart.getContentLink());
+            view.getContext().startActivity(intent);
+        }
+
+        private void bindTube(final ArticlePart part){
+            mPart = part;
+            final YouTubeThumbnailLoader.OnThumbnailLoadedListener onThumbnailLoadedListener =
+                    new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
+                @Override
+                public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
+                    youTubeThumbnailView.setVisibility(View.VISIBLE);
+                    mRelativeLayout.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
+                    Toast.makeText(mContext, "LOL", Toast.LENGTH_LONG).show();
+                }
+            };
+            mYouTubeThumbnailView.initialize(Links.YOUTUBE_API_KEY, new YouTubeThumbnailView.OnInitializedListener() {
+                @Override
+                public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader youTubeThumbnailLoader) {
+                    youTubeThumbnailLoader.setVideo(mPart.getContentLink());
+                    youTubeThumbnailLoader.setOnThumbnailLoadedListener(onThumbnailLoadedListener);
+                }
+
+                @Override
+                public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
+                    Toast.makeText(mContext, "LOL Init", Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
     private class ExtraLinkPartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

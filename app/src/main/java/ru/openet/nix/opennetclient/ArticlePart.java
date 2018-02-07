@@ -19,6 +19,7 @@ public class ArticlePart extends RealmObject{
     public static final int CODE = 2;
     public static final int LIST_ITEM = 3;
     public static final int ETRA_LINKS_ITEM = 4;
+    public static final int VIDEO_ITEM = 5;
 
     public static String ARTICLE_LINK = "mArticleLink";
 
@@ -29,15 +30,12 @@ public class ArticlePart extends RealmObject{
     public ArticlePart(int type, String text, String link) {
         mType = type;
         mArticleLink = link;
-        if(type == SIMPLE_TEXT || type == CODE){
+        if(type == SIMPLE_TEXT || type == CODE || type == LIST_ITEM){
             mText = text;
             mContentLink = null;
-        }else if(type == IMAGE){
+        }else if(type == IMAGE || type == VIDEO_ITEM){
             mContentLink = text;
             mText = null;
-        }else if(type == LIST_ITEM){
-            mText = text;
-            mContentLink = null;
         }
     }
 
@@ -74,5 +72,8 @@ public class ArticlePart extends RealmObject{
 
     public String getArticleLink() {
         return mArticleLink;
+    }
+    public void initVideoId(){
+        mContentLink = mContentLink.substring(30, 41);
     }
 }

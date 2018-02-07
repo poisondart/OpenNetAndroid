@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+    <com.google.android.youtube.player.YouTubeThumbnailView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        android:id="@+id/video_view"/>
+    <ImageView
+        android:id="@+id/btnYoutube_player"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:scaleType="center"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_play_circle"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:visibility="visible"
+        android:id="@+id/relative_youtube"
+        android:background="@android:color/black">
+    </RelativeLayout>
+</RelativeLayout>

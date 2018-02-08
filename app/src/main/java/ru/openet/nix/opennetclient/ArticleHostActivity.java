@@ -9,9 +9,9 @@ import android.os.Bundle;
 
 public class ArticleHostActivity extends AppCompatActivity {
 
-    private static final String EXTRA_TITLE = "ru.opennet.nix.opennetclient.title";
-    private static final String EXTRA_LINK = "ru.opennet.nix.opennetclient.link";
-    private static final String EXTRA_DATE = "ru.opennet.nix.opennetclient.date";
+    private static final String EXTRA_TITLE = "article_title";
+    private static final String EXTRA_LINK = "article_link";
+    private static final String EXTRA_DATE = "article_date";
 
     private String mArticleTitle, mArticleDate, mArticleLink;
 

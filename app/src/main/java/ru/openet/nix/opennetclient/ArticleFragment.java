@@ -85,7 +85,7 @@ public class ArticleFragment extends Fragment {
         mArticleDate = (String)getArguments().getSerializable(ARG_ARTICLE_DATE);
         mArticleLink = (String)getArguments().getSerializable(ARG_ARTICLE_LINK);
         setHasOptionsMenu(true);
-        setRetainInstance(true);
+        //setRetainInstance(true);
         Realm.init(getContext());
         mRealm = Realm.getDefaultInstance();
     }

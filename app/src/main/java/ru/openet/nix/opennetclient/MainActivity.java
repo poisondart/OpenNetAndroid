@@ -34,6 +34,13 @@ public class MainActivity extends AppCompatActivity implements BasicNewsFragment
         //mFragmentManager = getSupportFragmentManager();
         if(savedInstanceState != null){
             mFragment = getSupportFragmentManager().getFragment(savedInstanceState, "name");
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag("article");
+            if(fragment != null){
+                Bundle bundle = fragment.getArguments();
+                Intent intent = new Intent(this, ArticleHostActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
         }else{
             setupDefaultFragment();
         }

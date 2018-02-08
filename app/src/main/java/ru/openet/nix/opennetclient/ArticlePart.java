@@ -1,5 +1,8 @@
 package ru.openet.nix.opennetclient;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.Required;
 
@@ -7,7 +10,7 @@ import io.realm.annotations.Required;
  * Created by Nix on 28.01.2018.
  */
 
-public class ArticlePart extends RealmObject{
+public class ArticlePart extends RealmObject implements Parcelable{
     @Required
     private String mArticleLink;
     private String mText;
@@ -25,6 +28,34 @@ public class ArticlePart extends RealmObject{
 
     public ArticlePart() {
         //это для realm
+    }
+
+    private ArticlePart(Parcel in){
+        mArticleLink = in.readString();
+        mText = in.readString();
+        mContentLink = in.readString();
+        mType = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(mArticleLink);
+        parcel.writeString(mText);
+        parcel.writeString(mContentLink);
+        parcel.writeInt(mType);
+    }
+    public static final Parcelable.Creator<ArticlePart> CREATOR = new Parcelable.Creator<ArticlePart>() {
+        public ArticlePart createFromParcel(Parcel in) {
+            return new ArticlePart(in);
+        }
+
+        public ArticlePart[] newArray(int size) {
+            return new ArticlePart[size];
+        }
+    };
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public ArticlePart(int type, String text, String link) {

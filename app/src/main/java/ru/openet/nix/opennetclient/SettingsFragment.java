@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v14.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
 import android.widget.Toast;
 import java.io.BufferedReader;

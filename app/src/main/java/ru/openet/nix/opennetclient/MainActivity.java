@@ -12,7 +12,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements BasicNewsFragment.Callbacks{
+public class MainActivity extends AppCompatActivity implements BasicNewsFragment.Callbacks,
+        SavedArticlesFragment.RealmCallbacks{
 
     private DrawerLayout mDrawerLayout;
     //private FragmentManager mFragmentManager;
@@ -85,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements BasicNewsFragment
     }
     private void updateFragment(String title, String link){
         getSupportFragmentManager().beginTransaction().remove(mFragment).commit();
+        Fragment articleFragment = getSupportFragmentManager().findFragmentByTag("article");
+        if(articleFragment != null) getSupportFragmentManager().beginTransaction().remove(articleFragment).commit();
         mFragment = new BasicNewsFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TITLE_TAG, title);
@@ -102,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements BasicNewsFragment
     }
     private void loadFavsFragment(){
         getSupportFragmentManager().beginTransaction().remove(mFragment).commit();
+        Fragment articleFragment = getSupportFragmentManager().findFragmentByTag("article");
+        if(articleFragment != null) getSupportFragmentManager().beginTransaction().remove(articleFragment).commit();
         mFragment = new SavedArticlesFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.main_view, mFragment).commit();
     }
@@ -122,12 +127,28 @@ public class MainActivity extends AppCompatActivity implements BasicNewsFragment
             ArticleFragment articleFragment = ArticleFragment.newInstance(item.getDate(),
                     item.getTitle(), item.getLink());
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.detail_view, articleFragment).commit();
+                    .replace(R.id.detail_view, articleFragment, "article").commit();
         }else{
             Intent intent = ArticleHostActivity.newInstance(MainActivity.this,
                     item.getTitle(),
                     item.getLink(),
                     item.getDate());
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onArticleSelected(Article article) {
+        if(mIsDualPane){
+            ArticleFragment articleFragment = ArticleFragment.newInstance(article.getDate(),
+                    article.getTitle(), article.getLink());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_view, articleFragment, "article").commit();
+        }else{
+            Intent intent = ArticleHostActivity.newInstance(MainActivity.this,
+                    article.getTitle(),
+                    article.getLink(),
+                    article.getDate());
             startActivity(intent);
         }
     }

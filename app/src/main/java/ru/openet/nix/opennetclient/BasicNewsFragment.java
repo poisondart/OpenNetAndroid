@@ -1,8 +1,6 @@
 package ru.openet.nix.opennetclient;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -25,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
@@ -87,6 +84,7 @@ public class BasicNewsFragment extends Fragment {
             mListState = savedInstanceState.getParcelable("ListState");
         }
         setRetainInstance(true);
+        setHasOptionsMenu(false);
     }
 
     @Nullable

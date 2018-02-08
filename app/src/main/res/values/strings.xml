@@ -77,4 +77,6 @@
     <string name="go_dev_key">dev_key</string>
     <string name="dev_email">carpuninnandroid@yandex.ru</string>
     <string name="no_email_clients">У Вас не установлено никаких почтовых клиентов</string>
+    <!-- Alerts-->
+    <string name="cannot_play_video">Невозможно воспроизвести видео</string>
 </resources>

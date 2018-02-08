@@ -1,6 +1,6 @@
 package ru.openet.nix.opennetclient;
 
-import android.content.Context;
+/*import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
-import com.google.android.youtube.player.YouTubeThumbnailView;
+import com.google.android.youtube.player.YouTubeThumbnailView;*/
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * Created by Nix on 28.01.2018.
  */
 
-public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+/*public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM_TEXT = 2;
@@ -196,6 +196,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
        protected RelativeLayout mRelativeLayout;
        protected ImageView mImageView;
        ArticlePart mPart;
+       boolean isInit = false;
 
         public VideoPartViewHolder(View itemView) {
             super(itemView);
@@ -207,9 +208,11 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(View view) {
-            Intent intent = YouTubeStandalonePlayer.createVideoIntent((AppCompatActivity)view.getContext(),
-                    Links.YOUTUBE_API_KEY, mPart.getContentLink());
-            view.getContext().startActivity(intent);
+            if(isInit){
+                Intent intent = YouTubeStandalonePlayer.createVideoIntent((AppCompatActivity)view.getContext(),
+                        Links.YOUTUBE_API_KEY, mPart.getContentLink());
+                view.getContext().startActivity(intent);
+            }
         }
 
         private void bindTube(final ArticlePart part){
@@ -232,6 +235,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader youTubeThumbnailLoader) {
                     youTubeThumbnailLoader.setVideo(mPart.getContentLink());
                     youTubeThumbnailLoader.setOnThumbnailLoadedListener(onThumbnailLoadedListener);
+                    isInit = true;
                 }
 
                 @Override
@@ -276,4 +280,4 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             fragmentManager.beginTransaction().add(R.id.article_fragment_host, fragment).addToBackStack(null).commit();
         }
     }
-}
+}*/

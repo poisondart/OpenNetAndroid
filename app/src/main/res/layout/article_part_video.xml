@@ -10,8 +10,8 @@
         android:id="@+id/video_view"/>
     <ImageView
         android:id="@+id/btnYoutube_player"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
         android:scaleType="center"
         android:layout_centerInParent="true"
         android:src="@drawable/ic_play_circle"/>
@@ -21,5 +21,13 @@
         android:visibility="visible"
         android:id="@+id/relative_youtube"
         android:background="@android:color/black">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cannot_play_video"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
     </RelativeLayout>
 </RelativeLayout>

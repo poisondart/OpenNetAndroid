@@ -95,10 +95,6 @@ public class ArticleFragment extends Fragment {
         mArticle = new Article(mArticleDate, mArticleTitle, mArticleLink);
         mActionBar = (AppCompatActivity) getActivity();
         mActionBar.setSupportActionBar(mToolbar);
-        if(mActionBar.getSupportActionBar() != null){
-            mActionBar.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        mActionBar.getSupportActionBar().setDisplayShowHomeEnabled(true);
         if(mArticleDate != null){
             mActionBar.setTitle(mArticleDate);
         }else {
@@ -107,6 +103,7 @@ public class ArticleFragment extends Fragment {
 
         if(!checkArticleInRealm(mArticleLink)){
             new FetchPartsTask(mArticleLink, this).execute();
+            mReloadLayout.setVisibility(View.INVISIBLE);
         }
         mAdapter = new ArticleRecyclerViewAdapter(getContext(), mArticleTitle, mArticleParts);
         mRecyclerView.setAdapter(mAdapter);

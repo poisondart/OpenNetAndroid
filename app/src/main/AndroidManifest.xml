@@ -24,7 +24,6 @@
         <activity
             android:name=".ArticleHostActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:parentActivityName=".MainActivity"
             android:theme="@style/AppThemeArticle">
         </activity>
         <activity android:name=".SettingsHolderActivity"

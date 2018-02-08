@@ -196,6 +196,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
        protected RelativeLayout mRelativeLayout;
        protected ImageView mImageView;
        ArticlePart mPart;
+       boolean isInit = false;
 
         public VideoPartViewHolder(View itemView) {
             super(itemView);
@@ -207,9 +208,11 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(View view) {
-            Intent intent = YouTubeStandalonePlayer.createVideoIntent((AppCompatActivity)view.getContext(),
-                    Links.YOUTUBE_API_KEY, mPart.getContentLink());
-            view.getContext().startActivity(intent);
+            if(isInit){
+                Intent intent = YouTubeStandalonePlayer.createVideoIntent((AppCompatActivity)view.getContext(),
+                        Links.YOUTUBE_API_KEY, mPart.getContentLink());
+                view.getContext().startActivity(intent);
+            }
         }
 
         private void bindTube(final ArticlePart part){
@@ -224,7 +227,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 @Override
                 public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-                    Toast.makeText(mContext, "LOL", Toast.LENGTH_LONG).show();
+                    //nothing
                 }
             };
             mYouTubeThumbnailView.initialize(Links.YOUTUBE_API_KEY, new YouTubeThumbnailView.OnInitializedListener() {
@@ -232,11 +235,12 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader youTubeThumbnailLoader) {
                     youTubeThumbnailLoader.setVideo(mPart.getContentLink());
                     youTubeThumbnailLoader.setOnThumbnailLoadedListener(onThumbnailLoadedListener);
+                    isInit = true;
                 }
 
                 @Override
                 public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-                    Toast.makeText(mContext, "LOL Init", Toast.LENGTH_LONG).show();
+                    //nothing
                 }
             });
         }

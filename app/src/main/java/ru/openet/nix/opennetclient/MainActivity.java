@@ -10,24 +10,33 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BasicNewsFragment.Callbacks,
+        SavedArticlesFragment.RealmCallbacks{
 
     private DrawerLayout mDrawerLayout;
-    private FragmentManager mFragmentManager;
+    //private FragmentManager mFragmentManager;
     private Fragment mFragment;
 
     public static final String TITLE_TAG = "title";
     public static final String LINK_TAG = "link";
+    private boolean mIsDualPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_masterdetail);
+        View articleView = findViewById(R.id.detail_view);
+        mIsDualPane = articleView != null &&
+                articleView.getVisibility() == View.VISIBLE;
         mDrawerLayout = findViewById(R.id.drawerlayout);
-        mFragmentManager = getSupportFragmentManager();
-        mFragment = new BasicNewsFragment();
-        setupDefaultFragment();
+        //mFragmentManager = getSupportFragmentManager();
+        if(savedInstanceState != null){
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, "name");
+        }else{
+            setupDefaultFragment();
+        }
         final NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setCheckedItem(R.id.main_item);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -76,28 +85,71 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void updateFragment(String title, String link){
-        mFragmentManager.beginTransaction().remove(mFragment).commit();
+        getSupportFragmentManager().beginTransaction().remove(mFragment).commit();
+        Fragment articleFragment = getSupportFragmentManager().findFragmentByTag("article");
+        if(articleFragment != null) getSupportFragmentManager().beginTransaction().remove(articleFragment).commit();
         mFragment = new BasicNewsFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TITLE_TAG, title);
         bundle.putString(LINK_TAG, link);
         mFragment.setArguments(bundle);
-        mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.main_view, mFragment).commit();
     }
     private void setupDefaultFragment(){
+        mFragment = new BasicNewsFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TITLE_TAG, "Главные новости");
         bundle.putString(LINK_TAG, Links.MAIN_NEWS_RSS_LINK);
         mFragment.setArguments(bundle);
-        mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.main_view, mFragment).commit();
     }
     private void loadFavsFragment(){
-        mFragmentManager.beginTransaction().remove(mFragment).commit();
+        getSupportFragmentManager().beginTransaction().remove(mFragment).commit();
+        Fragment articleFragment = getSupportFragmentManager().findFragmentByTag("article");
+        if(articleFragment != null) getSupportFragmentManager().beginTransaction().remove(articleFragment).commit();
         mFragment = new SavedArticlesFragment();
-        mFragmentManager.beginTransaction().add(R.id.main_view, mFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.main_view, mFragment).commit();
     }
     private void loadSettingsFragment(){
         Intent intent = new Intent(MainActivity.this, SettingsHolderActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, "name", mFragment);
+    }
+
+    @Override
+    public void onItemSelected(NewsItem item) {
+        if(mIsDualPane){
+            ArticleFragment articleFragment = ArticleFragment.newInstance(item.getDate(),
+                    item.getTitle(), item.getLink());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_view, articleFragment, "article").commit();
+        }else{
+            Intent intent = ArticleHostActivity.newInstance(MainActivity.this,
+                    item.getTitle(),
+                    item.getLink(),
+                    item.getDate());
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onArticleSelected(Article article) {
+        if(mIsDualPane){
+            ArticleFragment articleFragment = ArticleFragment.newInstance(article.getDate(),
+                    article.getTitle(), article.getLink());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_view, articleFragment, "article").commit();
+        }else{
+            Intent intent = ArticleHostActivity.newInstance(MainActivity.this,
+                    article.getTitle(),
+                    article.getLink(),
+                    article.getDate());
+            startActivity(intent);
+        }
     }
 }

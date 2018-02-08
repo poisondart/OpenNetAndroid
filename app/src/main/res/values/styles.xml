@@ -21,5 +21,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14</item>
     </style>
+    <style name="ArticleItem">
+        <item name="android:background">@drawable/item</item>
+    </style>
 
 </resources>

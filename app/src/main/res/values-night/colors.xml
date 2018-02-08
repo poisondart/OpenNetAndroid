@@ -7,4 +7,5 @@
     <color name="colorBackground">#212121</color>
     <color name="colorGrey">#f5f5f5</color>
     <color name="dateColor">#FF6F00</color>
+    <color name="pressedColor">#8d6e63</color>
 </resources>

@@ -16,7 +16,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,6 +45,8 @@ public class ArticleFragment extends Fragment {
     private LinearLayoutManager mLinearLayoutManager;
     private AppCompatActivity mActionBar;
     private Realm mRealm;
+    private TextView mReaload;
+    private LinearLayout mReloadLayout;
 
     private String mArticleTitle, mArticleDate, mArticleLink;
 
@@ -79,6 +83,8 @@ public class ArticleFragment extends Fragment {
         View v = inflater.inflate(R.layout.article_fragment, container, false);
         mToolbar = v.findViewById(R.id.toolbar_article);
         mProgressBar = v.findViewById(R.id.progressbar_article);
+        mReloadLayout = v.findViewById(R.id.reload_layout);
+        mReaload = v.findViewById(R.id.reload);
         mArticleParts = new ArrayList<>();
         mProgressBar.setMax(100);
         setHasOptionsMenu(true);
@@ -104,6 +110,13 @@ public class ArticleFragment extends Fragment {
         }
         mAdapter = new ArticleRecyclerViewAdapter(getContext(), mArticleTitle, mArticleParts);
         mRecyclerView.setAdapter(mAdapter);
+        mReaload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new FetchPartsTask(mArticleLink, ArticleFragment.this).execute();
+                mReloadLayout.setVisibility(View.INVISIBLE);
+            }
+        });
         return v;
     }
 
@@ -120,16 +133,18 @@ public class ArticleFragment extends Fragment {
         menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                if(!mSaved){
-                    Toast.makeText(getContext(), R.string.added_to_favs, Toast.LENGTH_SHORT).show();
-                    menuItem.setIcon(getResources().getDrawable(R.drawable.ic_favorited));
-                    addArticleToRealm();
-                }else{
-                    Toast.makeText(getContext(), R.string.deleted_from_favs, Toast.LENGTH_SHORT).show();
-                    menuItem.setIcon(getResources().getDrawable(R.drawable.ic_not_favorited));
-                    deleteArticleFromRealm();
+                if(!mArticleParts.isEmpty()){
+                    if(!mSaved){
+                        Toast.makeText(getContext(), R.string.added_to_favs, Toast.LENGTH_SHORT).show();
+                        menuItem.setIcon(getResources().getDrawable(R.drawable.ic_favorited));
+                        addArticleToRealm();
+                    }else{
+                        Toast.makeText(getContext(), R.string.deleted_from_favs, Toast.LENGTH_SHORT).show();
+                        menuItem.setIcon(getResources().getDrawable(R.drawable.ic_not_favorited));
+                        deleteArticleFromRealm();
+                    }
+                    mSaved = !mSaved;
                 }
-                mSaved = !mSaved;
                 return true;
             }
         });
@@ -163,6 +178,9 @@ public class ArticleFragment extends Fragment {
             super.onPreExecute();
             ArticleFragment fragment = mReference.get();
             if (fragment == null) return;
+            if(fragment.mReloadLayout.getVisibility() == View.VISIBLE){
+                fragment.mReloadLayout.setVisibility(View.INVISIBLE);
+            }
             fragment.mProgressBar.setVisibility(View.VISIBLE);
             fragment.mProgressBar.setProgress(0);
         }
@@ -173,7 +191,7 @@ public class ArticleFragment extends Fragment {
             ArticleFragment fragment = mReference.get();
             if (fragment == null) return;
             if (integer == 0){
-                Toast.makeText(fragment.getContext(), "Не удалось загрузить данные", Toast.LENGTH_SHORT).show();
+                fragment.mReloadLayout.setVisibility(View.VISIBLE);
                 return;
             }
             fragment.mAdapter.setParts(fragment.mArticleParts);

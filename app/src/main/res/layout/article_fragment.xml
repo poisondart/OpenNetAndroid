@@ -25,7 +25,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
         <ProgressBar
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -37,9 +37,36 @@
             android:progressDrawable="@drawable/custom_article_progressbar"/>
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/article_recyclerview"
             android:layout_below="@+id/progressbar_article"/>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/reload_layout"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="visible">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_margin="6dp"
+            android:text="@string/unsuccess_load"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/reload"
+            android:layout_margin="6dp"
+            android:padding="10dp"
+            android:text="@string/reload"
+            android:textColor="@color/dateColor"
+            android:textStyle="bold"/>
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

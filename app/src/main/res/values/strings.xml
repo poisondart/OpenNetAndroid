@@ -79,4 +79,6 @@
     <string name="no_email_clients">У Вас не установлено никаких почтовых клиентов</string>
     <!-- Alerts-->
     <string name="cannot_play_video">Невозможно воспроизвести видео</string>
+    <string name="unsuccess_load">Неполучилось загрузить данные, проверьте подключение к сети</string>
+    <string name="reload">Попробовать снова</string>
 </resources>

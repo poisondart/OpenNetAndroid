@@ -17,6 +17,8 @@ import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
@@ -128,6 +130,9 @@ public class BasicNewsFragment extends Fragment {
         protected void onPostExecute(Integer integer) {
             BasicNewsFragment fragment = fragmentRef.get();
             if (fragment == null) return;
+            if (fragment.mNewsItems.isEmpty()){
+                Toast.makeText(fragment.getContext(), R.string.unsuccess_load, Toast.LENGTH_SHORT).show();
+            }
             fragment.mSwipeRefreshLayout.setRefreshing(false);
             fragment.mRecyclerView.setAdapter(new NewsItemAdapter(fragment.mNewsItems));
         }
